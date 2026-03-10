@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拼豆圖紙產生器 - Bead Pattern Maker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem">
+      <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+        <canvas class="logo-canvas" width="34" height="34" aria-hidden="true"></canvas>
+        <h1 style="font-size:1.9rem" data-i18n="editorTitle">拼豆圖紙產生器</h1>
+      </a>
+    </div>
+    <p class="subtitle" data-i18n="editorSubtitle">上傳圖片，一鍵轉換成拼豆圖紙</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="fileInput" accept="image/*" hidden>
+        <div class="upload-placeholder" id="uploadPlaceholder">
+          <span class="upload-icon">📷</span>
+          <p data-i18n="uploadText">點擊或拖曳圖片到這裡</p>
+          <p class="hint" data-i18n="uploadHint">支援 JPG、PNG、GIF、WebP</p>
+        </div>
+        <img id="previewImg" class="preview-img" alt="Preview">
+      </div>
+
+      <div class="settings">
+        <div class="setting-group">
+          <label for="boardSize" data-i18n="boardSize">拼豆板尺寸</label>
+          <select id="boardSize">
+            <option value="20">20×20</option>
+            <option value="30">30×30</option>
+            <option value="40">40×40</option>
+            <option value="50" selected>50×50</option>
+            <option value="60">60×60</option>
+            <option value="custom" data-i18n="boardCustom">自訂</option>
+          </select>
+        </div>
+
+        <div class="setting-group custom-size" id="customSizeGroup" style="display:none">
+          <label for="customWidth" data-i18n="customW">寬度（珠數）</label>
+          <input type="number" id="customWidth" min="10" max="200" value="50">
+          <label for="customHeight" data-i18n="customH">高度（珠數）</label>
+          <input type="number" id="customHeight" min="10" max="200" value="50">
+        </div>
+
+        <div class="setting-group">
+          <label for="colorCount"><span data-i18n="colorCount">顏色數量</span>: <span id="colorCountVal">15</span></label>
+          <input type="range" id="colorCount" min="2" max="60" value="15">
+        </div>
+
+        <div class="setting-group">
+          <label for="brand" data-i18n="brandLabel">拼豆品牌</label>
+          <select id="brand">
+            <option value="mard">MARD (188)</option>
+            <option value="hama">Hama (51)</option>
+            <option value="artkal-s">Artkal S (185)</option>
+            <option value="artkal-r">Artkal R (93)</option>
+            <option value="artkal-c">Artkal C (157)</option>
+            <option value="artkal-a">Artkal A (157)</option>
+            <option value="perler">Perler (89)</option>
+            <option value="perler-mini">Perler Mini (42)</option>
+            <option value="nabbi">Nabbi (30)</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label for="beadShape" data-i18n="shapeLabel">珠子形狀</label>
+          <select id="beadShape">
+            <option value="circle" data-i18n="shapeCircle">圓形</option>
+            <option value="square" data-i18n="shapeSquare">方形</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label>
+            <input type="checkbox" id="showGrid" checked> <span data-i18n="showGrid">顯示格線</span>
+          </label>
+        </div>
+
+        <details class="advanced-toggle" open>
+          <summary data-i18n="advancedOpts">進階選項</summary>
+
+          <div class="setting-group">
+            <label>
+              <input type="checkbox" id="showSymbols"> <span data-i18n="showSymbols">顯示符號（方便辨識顏色）</span>
+            </label>
+          </div>
+
+          <div class="setting-group">
+            <label for="highlightLines"><span data-i18n="highlightLines">加粗線間隔</span>: <span id="highlightVal">10</span></label>
+            <input type="range" id="highlightLines" min="0" max="29" value="10">
+            <p class="hint" data-i18n="highlightHint">每隔 N 行加粗格線，方便數格子（0 = 關閉）</p>
+          </div>
+        </details>
+
+        <button id="convertBtn" class="btn-primary" disabled data-i18n="convertBtn">轉換圖紙 →</button>
+      </div>
+    </section>
+
+    <section class="result" id="resultSection" style="display:none">
+      <h2 data-i18n="resultTitle">拼豆圖紙</h2>
+      <div class="result-toolbar">
+        <button id="zoomIn" class="btn-small" data-i18n="zoomIn">+ 放大</button>
+        <button id="zoomOut" class="btn-small" data-i18n="zoomOut">− 縮小</button>
+        <button id="downloadPng" class="btn-small">↓ PNG</button>
+        <button id="downloadPdf" class="btn-small">↓ PDF</button>
+      </div>
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="beadCanvas"></canvas>
+      </div>
+      <div class="color-legend" id="colorLegend">
+        <h3 data-i18n="colorList">顏色清單</h3>
+        <div id="legendItems"></div>
+      </div>
+      <div class="bead-count" id="beadCount"></div>
+      <div class="buy-section" id="buySection">
+        <a id="buyLink" href="https://dingdongxi.com" target="_blank" rel="noopener" class="btn-buy">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span data-i18n="buyBtn">購買材料</span>
+        </a>
+        <p class="buy-hint" data-i18n="buyHint">根據色號清單，一鍵前往商城選購所需珠子</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="index.html" data-i18n="footerHome">首頁</a>
+      <a href="editor.html" data-i18n="footerEditor">圖紙製作</a>
+      <a href="privacy.html" data-i18n="footerPrivacy">隱私權政策</a>
+      <a href="terms.html" data-i18n="footerTerms">使用條款</a>
+      <a href="mailto:hokidev26@gmail.com" data-i18n="footerContact">聯絡我們</a>
+    </div>
+    <p class="footer-copy"><span data-i18n="footer">拼豆圖紙產生器 — 免費線上工具 · 色碼資料來源</span> <a href="https://fusebead.sulian-blog.com" target="_blank" rel="noopener">fusebead.sulian-blog.com</a></p>
+    <p class="footer-note" data-i18n="footerNote">本工具完全在瀏覽器中運行，不會上傳或儲存任何圖片。</p>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

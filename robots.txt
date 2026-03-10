@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://beads.dingdongxi.com/sitemap.xml
