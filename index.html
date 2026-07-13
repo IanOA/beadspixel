@@ -3,14 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VEXQG1LKKD"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-VEXQG1LKKD');
-  </script>
   <title>拼豆圖紙產生器 - Bead Pattern Maker | 免費線上工具</title>
   <meta name="description" content="免費線上拼豆圖紙產生器，上傳圖片自動轉換成像素風格拼豆圖紙。支援 MARD、Hama、Artkal、Perler 等 9 大品牌共 992 種真實色號，下載 PDF 即可開始拼豆創作。">
   <meta name="keywords" content="拼豆,拼豆圖紙,fuse beads,bead pattern,pixel art,拼豆產生器,Perler,Hama,Artkal,MARD">
@@ -40,16 +32,16 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="landing.css">
 </head>
-<body class="landing-page">
+<body class="landing-page" data-page-title="pageTitleHome">
   <a href="#main-content" class="skip-link">跳到主要內容</a>
 
-  <nav class="nav" role="navigation" aria-label="主要導覽">
+  <nav class="nav" role="navigation" data-i18n-aria-label="ariaMainNav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
         <canvas class="logo-canvas" width="34" height="34" aria-hidden="true"></canvas>
         <span data-i18n="navLogo">拼豆圖紙產生器</span>
       </a>
-      <a href="editor.html" class="nav-cta" data-i18n="navCta">開始製作</a>
+      <div class="nav-actions"><a href="editor.html" class="nav-cta" data-i18n="navCta">開始製作</a><div class="lang-mount" data-lang-mount></div></div>
     </div>
   </nav>
 
@@ -57,7 +49,7 @@
     <section class="hero">
       <div class="hero-content">
         <div class="hero-badge" data-i18n="heroBadge">免費線上工具 · 無需註冊</div>
-        <h1 data-i18n="heroTitle">把喜歡的圖片<br>變成拼豆圖紙</h1>
+        <h1 data-i18n-html="heroTitle">把喜歡的圖片<br>變成拼豆圖紙</h1>
         <p class="hero-desc" data-i18n="heroDesc">上傳任何圖片，自動轉換成像素風格的拼豆圖紙。支援 9 大品牌、992 種真實色號，下載 PDF 就能開始拼豆。</p>
         <div class="hero-actions">
           <a href="editor.html" class="btn-hero">
@@ -82,7 +74,7 @@
         </div>
       </div>
       <div class="hero-visual">
-        <div class="bead-grid-demo" id="beadDemo" aria-label="Bead pattern animation"></div>
+        <div class="bead-grid-demo" id="beadDemo" data-i18n-aria-label="ariaPatternAnimation"></div>
         <div class="hero-visual-glow"></div>
       </div>
     </section>
@@ -162,7 +154,7 @@
         <div class="feature-card">
           <div class="feature-icon" style="background:var(--mint-light);color:var(--mint)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
           <h4 data-i18n="feat2">多種板子尺寸</h4>
-          <p data-i18n="feat2d">29×29、50×50、58×58 或自訂尺寸，靈活搭配你的拼豆板</p>
+          <p data-i18n="feat2d">20×20、30×30、40×40、50×50、60×60 或自訂尺寸，靈活搭配你的拼豆板</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:var(--purple-light);color:var(--purple)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
@@ -220,7 +212,7 @@
         </details>
         <details class="faq-item">
           <summary data-i18n="faq4q">可以自訂拼豆板的大小嗎？</summary>
-          <p data-i18n="faq4a">可以。除了預設的 29×29、50×50 等尺寸外，你也可以自訂任意寬高。</p>
+          <p data-i18n="faq4a">可以。可選擇 20×20、30×30、40×40、50×50、60×60，或設定 10–200 的自訂寬高（總格數最多 40,000）。</p>
         </details>
         <details class="faq-item">
           <summary data-i18n="faq5q">下載的 PDF 包含什麼？</summary>
@@ -283,7 +275,7 @@
       {"@type": "Question", "name": "這個工具是免費的嗎？", "acceptedAnswer": {"@type": "Answer", "text": "是的，完全免費，無需註冊，也沒有使用次數限制。"}},
       {"@type": "Question", "name": "我的圖片會被上傳到伺服器嗎？", "acceptedAnswer": {"@type": "Answer", "text": "不會。所有處理都在你的瀏覽器中完成，圖片不會離開你的裝置。"}},
       {"@type": "Question", "name": "支援哪些拼豆品牌？", "acceptedAnswer": {"@type": "Answer", "text": "目前支援 MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi 共 9 個品牌，992 種真實色號。"}},
-      {"@type": "Question", "name": "可以自訂拼豆板的大小嗎？", "acceptedAnswer": {"@type": "Answer", "text": "可以。除了預設的 29×29、50×50 等尺寸外，你也可以自訂任意寬高。"}},
+      {"@type": "Question", "name": "可以自訂拼豆板的大小嗎？", "acceptedAnswer": {"@type": "Answer", "text": "可以。可選擇 20×20、30×30、40×40、50×50、60×60，或設定 10–200 的自訂寬高（總格數最多 40,000）。"}},
       {"@type": "Question", "name": "下載的 PDF 包含什麼？", "acceptedAnswer": {"@type": "Answer", "text": "PDF 包含完整的拼豆圖紙、顏色清單、各色號用量統計，方便你採購材料。"}}
     ]
   }

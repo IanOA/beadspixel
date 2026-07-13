@@ -3,41 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VEXQG1LKKD"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-VEXQG1LKKD');
-  </script>
   <title>拼豆圖紙產生器 - Bead Pattern Maker</title>
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-page-title="pageTitleEditor">
   <header>
-    <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem">
-      <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+    <div class="header-brand">
+      <a href="index.html" class="header-home">
         <canvas class="logo-canvas" width="34" height="34" aria-hidden="true"></canvas>
-        <h1 style="font-size:1.9rem" data-i18n="editorTitle">拼豆圖紙產生器</h1>
+        <h1 data-i18n="editorTitle">拼豆圖紙產生器</h1>
       </a>
     </div>
     <p class="subtitle" data-i18n="editorSubtitle">上傳圖片，一鍵轉換成拼豆圖紙</p>
+    <div class="lang-mount" data-lang-mount></div>
   </header>
 
   <main>
-    <section class="controls">
-      <div class="upload-area" id="uploadArea">
-        <input type="file" id="fileInput" accept="image/*" hidden>
+    <section class="controls" data-i18n-aria-label="ariaPatternSettings">
+      <div class="upload-column">
+      <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-controls="fileInput" aria-describedby="uploadHint uploadStatus uploadError" data-i18n-aria-label="ariaUpload">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp" hidden>
         <div class="upload-placeholder" id="uploadPlaceholder">
-          <span class="upload-icon">📷</span>
+          <span class="upload-icon" aria-hidden="true">📷</span>
           <p data-i18n="uploadText">點擊或拖曳圖片到這裡</p>
-          <p class="hint" data-i18n="uploadHint">支援 JPG、PNG、GIF、WebP</p>
+          <p class="hint" id="uploadHint" data-i18n="uploadHint">支援 JPG、PNG、GIF、WebP，最大 15 MB</p>
         </div>
-        <img id="previewImg" class="preview-img" alt="Preview">
+        <img id="previewImg" class="preview-img" alt="" hidden>
+        <div class="upload-loading" id="uploadLoading" hidden><span class="loading-spinner" aria-hidden="true"></span><span data-i18n="uploadLoading">正在讀取圖片…</span></div>
+      </div>
+      <div id="uploadStatus" class="status-message" role="status" aria-live="polite"></div>
+      <div id="uploadError" class="status-message error-message" role="alert" aria-live="assertive" hidden></div>
       </div>
 
       <div class="settings">
@@ -52,106 +50,58 @@
             <option value="custom" data-i18n="boardCustom">自訂</option>
           </select>
         </div>
-
-        <div class="setting-group custom-size" id="customSizeGroup" style="display:none">
-          <label for="customWidth" data-i18n="customW">寬度（珠數）</label>
-          <input type="number" id="customWidth" min="10" max="200" value="50">
-          <label for="customHeight" data-i18n="customH">高度（珠數）</label>
-          <input type="number" id="customHeight" min="10" max="200" value="50">
+        <div class="setting-group custom-size" id="customSizeGroup" hidden>
+          <div class="custom-size-fields">
+            <div><label for="customWidth" data-i18n="customW">寬度（珠數）</label><input type="number" id="customWidth" min="10" max="200" value="50" inputmode="numeric"></div>
+            <div><label for="customHeight" data-i18n="customH">高度（珠數）</label><input type="number" id="customHeight" min="10" max="200" value="50" inputmode="numeric"></div>
+          </div>
+          <p class="hint" data-i18n="sizeLimitHint">每邊 10–200，總格數最多 40,000</p>
         </div>
-
         <div class="setting-group">
           <label for="colorCount"><span data-i18n="colorCount">顏色數量</span>: <span id="colorCountVal">15</span></label>
           <input type="range" id="colorCount" min="2" max="60" value="15">
         </div>
-
         <div class="setting-group">
           <label for="brand" data-i18n="brandLabel">拼豆品牌</label>
           <select id="brand">
-            <option value="mard">MARD (188)</option>
-            <option value="hama">Hama (51)</option>
-            <option value="artkal-s">Artkal S (185)</option>
-            <option value="artkal-r">Artkal R (93)</option>
-            <option value="artkal-c">Artkal C (157)</option>
-            <option value="artkal-a">Artkal A (157)</option>
-            <option value="perler">Perler (89)</option>
-            <option value="perler-mini">Perler Mini (42)</option>
-            <option value="nabbi">Nabbi (30)</option>
+            <option value="mard">MARD (188)</option><option value="hama">Hama (51)</option><option value="artkal-s">Artkal S (185)</option><option value="artkal-r">Artkal R (93)</option><option value="artkal-c">Artkal C (157)</option><option value="artkal-a">Artkal A (157)</option><option value="perler">Perler (89)</option><option value="perler-mini">Perler Mini (42)</option><option value="nabbi">Nabbi (30)</option>
           </select>
         </div>
-
+        <div class="setting-group">
+          <label for="imageFit" data-i18n="fitMode">圖片適配</label>
+          <select id="imageFit"><option value="fit" data-i18n="fitContain">完整顯示（留白）</option><option value="fill" data-i18n="fitCover">填滿並裁切</option><option value="stretch" data-i18n="fitStretch">拉伸填滿</option></select>
+        </div>
+        <div class="setting-group">
+          <label for="backgroundColor" data-i18n="backgroundColor">背景色（透明像素）</label>
+          <input type="color" id="backgroundColor" value="#FFFFFF">
+        </div>
         <div class="setting-group">
           <label for="beadShape" data-i18n="shapeLabel">珠子形狀</label>
-          <select id="beadShape">
-            <option value="circle" data-i18n="shapeCircle">圓形</option>
-            <option value="square" data-i18n="shapeSquare">方形</option>
-          </select>
+          <select id="beadShape"><option value="circle" data-i18n="shapeCircle">圓形</option><option value="square" data-i18n="shapeSquare">方形</option></select>
         </div>
-
-        <div class="setting-group">
-          <label>
-            <input type="checkbox" id="showGrid" checked> <span data-i18n="showGrid">顯示格線</span>
-          </label>
-        </div>
-
+        <div class="setting-group"><label><input type="checkbox" id="showGrid" checked> <span data-i18n="showGrid">顯示格線</span></label></div>
         <details class="advanced-toggle" open>
           <summary data-i18n="advancedOpts">進階選項</summary>
-
-          <div class="setting-group">
-            <label>
-              <input type="checkbox" id="showSymbols"> <span data-i18n="showSymbols">顯示符號（方便辨識顏色）</span>
-            </label>
-          </div>
-
-          <div class="setting-group">
-            <label for="highlightLines"><span data-i18n="highlightLines">加粗線間隔</span>: <span id="highlightVal">10</span></label>
-            <input type="range" id="highlightLines" min="0" max="29" value="10">
-            <p class="hint" data-i18n="highlightHint">每隔 N 行加粗格線，方便數格子（0 = 關閉）</p>
-          </div>
+          <div class="setting-group"><label><input type="checkbox" id="showSymbols"> <span data-i18n="showSymbols">顯示符號（方便辨識顏色）</span></label></div>
+          <div class="setting-group"><label for="highlightLines"><span data-i18n="highlightLines">加粗線間隔</span>: <span id="highlightVal">10</span></label><input type="range" id="highlightLines" min="0" max="29" value="10"><p class="hint" data-i18n="highlightHint">每隔 N 行加粗格線，方便數格子（0 = 關閉）</p></div>
         </details>
-
         <button id="convertBtn" class="btn-primary" disabled data-i18n="convertBtn">轉換圖紙 →</button>
       </div>
     </section>
 
-    <section class="result" id="resultSection" style="display:none">
-      <h2 data-i18n="resultTitle">拼豆圖紙</h2>
+    <section class="result" id="resultSection" hidden aria-labelledby="resultTitle">
+      <h2 id="resultTitle" data-i18n="resultTitle">拼豆圖紙</h2>
+      <div id="resultStatus" class="status-message" role="status" aria-live="polite"></div>
       <div class="result-toolbar">
-        <button id="zoomIn" class="btn-small" data-i18n="zoomIn">+ 放大</button>
-        <button id="zoomOut" class="btn-small" data-i18n="zoomOut">− 縮小</button>
-        <button id="downloadPng" class="btn-small">↓ PNG</button>
-        <button id="downloadPdf" class="btn-small">↓ PDF</button>
+        <button id="zoomIn" class="btn-small" data-i18n="zoomIn">+ 放大</button><button id="zoomOut" class="btn-small" data-i18n="zoomOut">− 縮小</button><button id="downloadPng" class="btn-small" data-i18n="downloadPng">↓ PNG</button><button id="downloadPdf" class="btn-small" data-i18n="downloadPdf">↓ PDF</button>
       </div>
-      <div class="canvas-wrapper" id="canvasWrapper">
-        <canvas id="beadCanvas"></canvas>
-      </div>
-      <div class="color-legend" id="colorLegend">
-        <h3 data-i18n="colorList">顏色清單</h3>
-        <div id="legendItems"></div>
-      </div>
-      <div class="bead-count" id="beadCount"></div>
-      <div class="buy-section" id="buySection">
-        <a id="buyLink" href="https://dingdongxi.com" target="_blank" rel="noopener" class="btn-buy">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span data-i18n="buyBtn">購買材料</span>
-        </a>
-        <p class="buy-hint" data-i18n="buyHint">根據色號清單，一鍵前往商城選購所需珠子</p>
-      </div>
+      <div class="canvas-wrapper" id="canvasWrapper"><canvas id="beadCanvas" tabindex="0" data-i18n-aria-label="ariaPattern"></canvas></div>
+      <div class="color-legend" id="colorLegend"><h3 data-i18n="colorList">顏色清單</h3><div id="legendItems"></div></div>
+      <div class="bead-count" id="beadCount" aria-live="polite"></div>
+      <div class="buy-section" id="buySection"><a id="buyLink" href="https://dingdongxi.com" target="_blank" rel="noopener" class="btn-buy"><span data-i18n="buyBtn">購買材料</span></a><p class="buy-hint" data-i18n="buyHint">根據色號清單，一鍵前往商城選購所需珠子</p></div>
     </section>
   </main>
-
-  <footer>
-    <div class="footer-links">
-      <a href="index.html" data-i18n="footerHome">首頁</a>
-      <a href="editor.html" data-i18n="footerEditor">圖紙製作</a>
-      <a href="privacy.html" data-i18n="footerPrivacy">隱私權政策</a>
-      <a href="terms.html" data-i18n="footerTerms">使用條款</a>
-      <a href="mailto:hokidev26@gmail.com" data-i18n="footerContact">聯絡我們</a>
-    </div>
-    <p class="footer-copy"><span data-i18n="footer">拼豆圖紙產生器 — 免費線上工具 · 色碼資料來源</span> <a href="https://fusebead.sulian-blog.com" target="_blank" rel="noopener">fusebead.sulian-blog.com</a></p>
-    <p class="footer-note" data-i18n="footerNote">本工具完全在瀏覽器中運行，不會上傳或儲存任何圖片。</p>
-  </footer>
-
+  <footer><div class="footer-links"><a href="index.html" data-i18n="footerHome">首頁</a><a href="editor.html" data-i18n="footerEditor">圖紙製作</a><a href="privacy.html" data-i18n="footerPrivacy">隱私權政策</a><a href="terms.html" data-i18n="footerTerms">使用條款</a><a href="mailto:hokidev26@gmail.com" data-i18n="footerContact">聯絡我們</a></div><p class="footer-copy"><span data-i18n="footer">拼豆圖紙產生器 — 免費線上工具 · 色碼資料來源</span> <a href="https://fusebead.sulian-blog.com" target="_blank" rel="noopener">fusebead.sulian-blog.com</a></p><p class="footer-note" data-i18n="footerNote">本工具完全在瀏覽器中運行，不會上傳或儲存任何圖片。</p></footer>
   <script src="i18n.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="app.js"></script>

@@ -1083,190 +1083,303 @@ function medianCut(pixels, numColors) {
   });
 }
 
-// ===== Main App =====
-const fileInput = document.getElementById('fileInput');
-const uploadArea = document.getElementById('uploadArea');
-const uploadPlaceholder = document.getElementById('uploadPlaceholder');
-const previewImg = document.getElementById('previewImg');
-const boardSize = document.getElementById('boardSize');
-const customSizeGroup = document.getElementById('customSizeGroup');
-const colorCount = document.getElementById('colorCount');
-const colorCountVal = document.getElementById('colorCountVal');
-const brand = document.getElementById('brand');
-const beadShape = document.getElementById('beadShape');
-const showGrid = document.getElementById('showGrid');
-const showSymbols = document.getElementById('showSymbols');
-const convertBtn = document.getElementById('convertBtn');
-const resultSection = document.getElementById('resultSection');
-const beadCanvas = document.getElementById('beadCanvas');
-const legendItems = document.getElementById('legendItems');
-const beadCountDiv = document.getElementById('beadCount');
+// ===== Editor application =====
+const MAX_FILE_BYTES = 15 * 1024 * 1024;
+const MAX_IMAGE_PIXELS = 20_000_000;
+const MAX_GRID_SIDE = 200;
+const MIN_GRID_SIDE = 10;
+const MAX_GRID_CELLS = 40_000;
+const MAX_CANVAS_SIDE = 4096;
+const MAX_CANVAS_PIXELS = 16_000_000;
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
 
-let loadedImage = null;
-let currentZoom = 1;
-let beadData = null;
-let usedPalette = null;
+const $ = (id) => document.getElementById(id);
+const elements = {
+  fileInput: $('fileInput'), uploadArea: $('uploadArea'), uploadPlaceholder: $('uploadPlaceholder'),
+  previewImg: $('previewImg'), uploadLoading: $('uploadLoading'), uploadStatus: $('uploadStatus'),
+  uploadError: $('uploadError'), boardSize: $('boardSize'), customSizeGroup: $('customSizeGroup'),
+  customWidth: $('customWidth'), customHeight: $('customHeight'), colorCount: $('colorCount'),
+  colorCountVal: $('colorCountVal'), brand: $('brand'), imageFit: $('imageFit'), backgroundColor: $('backgroundColor'),
+  beadShape: $('beadShape'), showGrid: $('showGrid'), showSymbols: $('showSymbols'), highlightLines: $('highlightLines'),
+  highlightVal: $('highlightVal'), convertBtn: $('convertBtn'), resultSection: $('resultSection'),
+  resultStatus: $('resultStatus'), beadCanvas: $('beadCanvas'), legendItems: $('legendItems'), beadCount: $('beadCount'),
+  zoomIn: $('zoomIn'), zoomOut: $('zoomOut'), downloadPng: $('downloadPng'), downloadPdf: $('downloadPdf')
+};
 
-const highlightLines = document.getElementById('highlightLines');
-const highlightVal = document.getElementById('highlightVal');
-highlightLines.addEventListener('input', () => { highlightVal.textContent = highlightLines.value; });
-highlightLines.addEventListener('change', renderBeads);
+const appState = {
+  image: null,
+  objectUrl: null,
+  uploadToken: 0,
+  dataRevision: 0,
+  conversionToken: 0,
+  grid: null,
+  dataStale: false,
+  operations: { upload: false, convert: false, png: false, pdf: false },
+  messages: { uploadStatus: null, uploadError: null, resultStatus: null },
+  view: { zoom: 1, shape: 'circle', showGrid: true, showSymbols: false, highlight: 10 }
+};
 
-// ===== Event Listeners =====
-uploadArea.addEventListener('click', () => fileInput.click());
-uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
-uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-uploadArea.addEventListener('drop', e => {
-  e.preventDefault();
-  uploadArea.classList.remove('dragover');
-  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-});
-fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
-boardSize.addEventListener('change', () => {
-  customSizeGroup.style.display = boardSize.value === 'custom' ? 'block' : 'none';
-});
-colorCount.addEventListener('input', () => { colorCountVal.textContent = colorCount.value; });
-convertBtn.addEventListener('click', convert);
-document.getElementById('zoomIn').addEventListener('click', () => { currentZoom = Math.min(currentZoom * 1.3, 5); renderBeads(); });
-document.getElementById('zoomOut').addEventListener('click', () => { currentZoom = Math.max(currentZoom / 1.3, 0.3); renderBeads(); });
-showGrid.addEventListener('change', renderBeads);
-showSymbols.addEventListener('change', renderBeads);
-beadShape.addEventListener('change', renderBeads);
-document.getElementById('downloadPng').addEventListener('click', downloadPng);
-document.getElementById('downloadPdf').addEventListener('click', downloadPdf);
+const dataControls = [
+  elements.fileInput, elements.boardSize, elements.customWidth, elements.customHeight,
+  elements.colorCount, elements.brand, elements.imageFit, elements.backgroundColor
+];
+const viewControls = [
+  elements.beadShape, elements.showGrid, elements.showSymbols, elements.highlightLines,
+  elements.zoomIn, elements.zoomOut
+];
 
-function handleFile(file) {
-  if (!file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    previewImg.src = e.target.result;
-    previewImg.style.display = 'block';
-    uploadPlaceholder.style.display = 'none';
-    const img = new Image();
-    img.onload = () => { loadedImage = img; convertBtn.disabled = false; };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+function tr(key, values) {
+  const template = typeof window.t === 'function' ? window.t(key) : key;
+  return values ? template.replace(/\{(\w+)\}/g, (_, name) => values[name] == null ? '' : values[name]) : template;
 }
 
-function getGridSize() {
-  if (boardSize.value === 'custom') {
-    return {
-      w: parseInt(document.getElementById('customWidth').value) || 50,
-      h: parseInt(document.getElementById('customHeight').value) || 50
-    };
+function renderMessage(name) {
+  const target = elements[name];
+  const message = appState.messages[name];
+  target.textContent = message ? tr(message.key, message.values) : '';
+  target.hidden = !message;
+  target.classList.toggle('is-error', Boolean(message && message.isError));
+}
+
+function setMessage(name, key, values, isError) {
+  appState.messages[name] = key ? { key, values: values || {}, isError: Boolean(isError) } : null;
+  renderMessage(name);
+}
+
+function setUploadLoading(loading) {
+  elements.uploadLoading.hidden = !loading;
+  elements.uploadArea.classList.toggle('is-loading', loading);
+  elements.uploadArea.setAttribute('aria-busy', String(loading));
+}
+
+function isBusy() { return Object.values(appState.operations).some(Boolean); }
+
+function syncControls() {
+  const busy = isBusy();
+  const pdfBusy = appState.operations.pdf;
+  elements.convertBtn.disabled = busy || !appState.image;
+  elements.downloadPng.disabled = busy || !appState.grid || appState.dataStale;
+  elements.downloadPdf.disabled = busy || !appState.grid || appState.dataStale;
+  dataControls.forEach((control) => { control.disabled = busy; });
+  elements.uploadArea.setAttribute('aria-disabled', String(busy));
+  viewControls.forEach((control) => { control.disabled = pdfBusy; });
+  document.querySelectorAll('[data-lang-mount] select').forEach((control) => { control.disabled = pdfBusy; });
+}
+
+function setOperationBusy(operation, busy, messageKey, values) {
+  appState.operations[operation] = busy;
+  syncControls();
+  if (messageKey) setMessage('resultStatus', messageKey, values, false);
+}
+
+function appError(key) {
+  const error = new Error(key);
+  error.i18nKey = key;
+  return error;
+}
+
+function errorKey(error, fallback) { return (error && error.i18nKey) || fallback; }
+
+function isAllowedImage(file) {
+  if (ALLOWED_IMAGE_TYPES.has(file.type)) return true;
+  return /\.(jpe?g|png|gif|webp)$/i.test(file.name || '');
+}
+
+function resetUploadMessages() {
+  setMessage('uploadError', null);
+  setMessage('uploadStatus', null);
+}
+
+function rejectFile(key) {
+  setMessage('uploadError', key, null, true);
+  elements.fileInput.value = '';
+}
+
+function decodeImage(file, url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(appError('errorImageBroken'));
+    image.src = url;
+  });
+}
+
+async function handleFile(file) {
+  if (isBusy()) return;
+  const token = ++appState.uploadToken;
+  appState.dataRevision++;
+  resetUploadMessages();
+  if (!file) { setUploadLoading(false); syncControls(); return; }
+  if (file.size > MAX_FILE_BYTES) { setUploadLoading(false); rejectFile('errorFileTooLarge'); syncControls(); return; }
+  if (!isAllowedImage(file)) { setUploadLoading(false); rejectFile('errorFileType'); syncControls(); return; }
+
+  const url = URL.createObjectURL(file);
+  setOperationBusy('upload', true);
+  setUploadLoading(true);
+  setMessage('uploadStatus', 'uploadLoading');
+  if (appState.grid) markDataStale();
+  try {
+    const image = await decodeImage(file, url);
+    if (token !== appState.uploadToken) { URL.revokeObjectURL(url); return; }
+    if (!image.naturalWidth || !image.naturalHeight) throw appError('errorImageBroken');
+    if (image.naturalWidth * image.naturalHeight > MAX_IMAGE_PIXELS) throw appError('errorImagePixels');
+    if (appState.objectUrl) URL.revokeObjectURL(appState.objectUrl);
+    appState.objectUrl = url;
+    appState.image = image;
+    elements.previewImg.src = url;
+    elements.previewImg.alt = file.name;
+    elements.previewImg.hidden = false;
+    elements.uploadPlaceholder.hidden = true;
+    setMessage('uploadStatus', 'uploadReady', { name: file.name });
+  } catch (error) {
+    if (token === appState.uploadToken) rejectFile(errorKey(error, 'errorImageBroken'));
+    URL.revokeObjectURL(url);
+  } finally {
+    if (token === appState.uploadToken) {
+      setUploadLoading(false);
+      setOperationBusy('upload', false);
+    }
   }
-  const s = parseInt(boardSize.value);
-  return { w: s, h: s };
 }
 
-function convert() {
-  if (!loadedImage) return;
-  const { w, h } = getGridSize();
-  const numColors = parseInt(colorCount.value);
-  const palette = BRAND_PALETTES[brand.value];
-  const offscreen = document.createElement('canvas');
-  offscreen.width = w; offscreen.height = h;
-  const ctx = offscreen.getContext('2d');
-  const imgRatio = loadedImage.width / loadedImage.height;
-  const gridRatio = w / h;
-  let drawW, drawH, offsetX, offsetY;
-  if (imgRatio > gridRatio) {
-    drawW = w; drawH = Math.round(w / imgRatio); offsetX = 0; offsetY = Math.floor((h - drawH) / 2);
+function validateGridSize() {
+  let w, h;
+  if (elements.boardSize.value === 'custom') {
+    w = Number(elements.customWidth.value);
+    h = Number(elements.customHeight.value);
   } else {
-    drawH = h; drawW = Math.round(h * imgRatio); offsetX = Math.floor((w - drawW) / 2); offsetY = 0;
+    w = h = Number.parseInt(elements.boardSize.value, 10);
   }
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillRect(0, 0, w, h);
-  ctx.drawImage(loadedImage, offsetX, offsetY, drawW, drawH);
-  const imageData = ctx.getImageData(0, 0, w, h);
-  const pixels = [];
-  for (let i = 0; i < imageData.data.length; i += 4) {
-    pixels.push([imageData.data[i], imageData.data[i+1], imageData.data[i+2]]);
+  if (!Number.isInteger(w) || !Number.isInteger(h) || w < MIN_GRID_SIDE || h < MIN_GRID_SIDE || w > MAX_GRID_SIDE || h > MAX_GRID_SIDE || w * h > MAX_GRID_CELLS) {
+    throw appError('errorGridSize');
   }
-  const quantized = medianCut([...pixels], numColors);
-  const colorMap = new Map();
-  for (const qc of quantized) {
-    const key = qc.join(',');
-    if (!colorMap.has(key)) colorMap.set(key, findClosestColor(qc, palette));
-  }
-  beadData = [];
-  for (let y = 0; y < h; y++) {
-    const row = [];
-    for (let x = 0; x < w; x++) {
-      const px = pixels[y * w + x];
-      let minD = Infinity, closest = quantized[0];
-      for (const qc of quantized) {
-        const d = colorDistance(px, qc);
-        if (d < minD) { minD = d; closest = qc; }
-      }
-      row.push(colorMap.get(closest.join(',')));
-    }
-    beadData.push(row);
-  }
-  const usedSet = new Map();
-  for (const row of beadData) {
-    for (const c of row) {
-      const k = c.code;
-      if (!usedSet.has(k)) usedSet.set(k, { ...c, count: 0 });
-      usedSet.get(k).count++;
-    }
-  }
-  usedPalette = Array.from(usedSet.values());
-  resultSection.style.display = 'block';
-  currentZoom = 1;
-  renderBeads(); renderLegend(); renderBeadCount();
-  resultSection.scrollIntoView({ behavior: 'smooth' });
+  return { w, h };
 }
 
-function renderBeads() {
-  if (!beadData || !beadData.length) return;
-  const h = beadData.length, w = beadData[0].length;
-  const cellSize = Math.round(16 * currentZoom);
-  const canvas = beadCanvas;
-  canvas.width = w * cellSize; canvas.height = h * cellSize;
-  const ctx = canvas.getContext('2d');
-  const isCircle = beadShape.value === 'circle';
-  const gridOn = showGrid.checked;
-  const symbolsOn = showSymbols.checked;
-  const symbolMap = {};
-  if (usedPalette) usedPalette.forEach((c, i) => { symbolMap[c.code] = SYMBOLS[i % SYMBOLS.length]; });
-  ctx.fillStyle = '#e8e8e8';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const color = beadData[y][x];
-      const cx = x * cellSize, cy = y * cellSize;
-      if (isCircle) {
-        const r = cellSize * 0.42;
-        ctx.beginPath();
-        ctx.arc(cx + cellSize/2, cy + cellSize/2, r, 0, Math.PI * 2);
-        ctx.fillStyle = color.hex; ctx.fill();
-        ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 0.5; ctx.stroke();
-      } else {
-        ctx.fillStyle = color.hex;
-        ctx.fillRect(cx + 0.5, cy + 0.5, cellSize - 1, cellSize - 1);
-      }
-      if (symbolsOn && cellSize >= 10) {
-        const sym = symbolMap[color.code] || '?';
-        ctx.fillStyle = luminance(color.hex) > 0.5 ? '#333' : '#fff';
-        ctx.font = `${Math.max(8, cellSize * 0.5)}px sans-serif`;
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText(sym, cx + cellSize/2, cy + cellSize/2);
-      }
-    }
+function getDataOptions() {
+  const size = validateGridSize();
+  return {
+    ...size,
+    colorCount: Number.parseInt(elements.colorCount.value, 10),
+    brand: elements.brand.value,
+    fit: elements.imageFit.value,
+    background: elements.backgroundColor.value
+  };
+}
+
+function getViewOptions() {
+  return {
+    zoom: appState.view.zoom,
+    shape: elements.beadShape.value,
+    showGrid: elements.showGrid.checked,
+    showSymbols: elements.showSymbols.checked,
+    highlight: Number.parseInt(elements.highlightLines.value, 10) || 0
+  };
+}
+
+function markDataStale() {
+  if (!appState.grid) return;
+  appState.dataStale = true;
+  elements.resultSection.classList.add('is-stale');
+  setMessage('resultStatus', 'staleMessage');
+  syncControls();
+}
+
+function updateCustomSizeVisibility() {
+  elements.customSizeGroup.hidden = elements.boardSize.value !== 'custom';
+}
+
+function compositeAndDraw(ctx, image, options) {
+  const { w, h, fit, background } = options;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, w, h);
+  const sourceRatio = image.naturalWidth / image.naturalHeight;
+  const targetRatio = w / h;
+  let drawW = w, drawH = h, x = 0, y = 0;
+  if (fit === 'fit') {
+    if (sourceRatio > targetRatio) { drawH = w / sourceRatio; y = (h - drawH) / 2; }
+    else { drawW = h * sourceRatio; x = (w - drawW) / 2; }
+  } else if (fit === 'fill') {
+    if (sourceRatio > targetRatio) { drawW = h * sourceRatio; x = (w - drawW) / 2; }
+    else { drawH = w / sourceRatio; y = (h - drawH) / 2; }
   }
-  if (gridOn) {
-    ctx.strokeStyle = 'rgba(0,0,0,0.12)'; ctx.lineWidth = 0.5;
-    for (let x = 0; x <= w; x++) { ctx.beginPath(); ctx.moveTo(x*cellSize,0); ctx.lineTo(x*cellSize,h*cellSize); ctx.stroke(); }
-    for (let y = 0; y <= h; y++) { ctx.beginPath(); ctx.moveTo(0,y*cellSize); ctx.lineTo(w*cellSize,y*cellSize); ctx.stroke(); }
-    const hl = parseInt(highlightLines.value) || 0;
-    if (hl > 0) {
-      ctx.strokeStyle = 'rgba(0,0,0,0.45)'; ctx.lineWidth = 2;
-      for (let x = 0; x <= w; x += hl) { ctx.beginPath(); ctx.moveTo(x*cellSize,0); ctx.lineTo(x*cellSize,h*cellSize); ctx.stroke(); }
-      for (let y = 0; y <= h; y += hl) { ctx.beginPath(); ctx.moveTo(0,y*cellSize); ctx.lineTo(w*cellSize,y*cellSize); ctx.stroke(); }
+  ctx.drawImage(image, x, y, drawW, drawH);
+}
+
+function generateGrid(image, options) {
+  const scratch = document.createElement('canvas');
+  scratch.width = options.w;
+  scratch.height = options.h;
+  const ctx = scratch.getContext('2d', { willReadFrequently: true });
+  if (!ctx) throw appError('errorCanvas');
+  compositeAndDraw(ctx, image, options);
+  const imageData = ctx.getImageData(0, 0, options.w, options.h).data;
+  const pixels = new Array(options.w * options.h);
+  for (let i = 0, p = 0; i < imageData.length; i += 4, p++) pixels[p] = [imageData[i], imageData[i + 1], imageData[i + 2]];
+  const quantized = medianCut(pixels.slice(), options.colorCount);
+  if (!quantized.length) throw appError('errorCanvas');
+  const palette = BRAND_PALETTES[options.brand];
+  const paletteIndices = new Map();
+  quantized.forEach((color) => {
+    const closest = findClosestColor(color, palette);
+    paletteIndices.set(color.join(','), palette.indexOf(closest));
+  });
+  const indices = new Uint8Array(options.w * options.h);
+  const counts = new Uint32Array(palette.length);
+  for (let i = 0; i < pixels.length; i++) {
+    let minDistance = Infinity;
+    let closest = quantized[0];
+    for (const candidate of quantized) {
+      const distance = colorDistance(pixels[i], candidate);
+      if (distance < minDistance) { minDistance = distance; closest = candidate; }
     }
+    const paletteIndex = paletteIndices.get(closest.join(','));
+    indices[i] = paletteIndex;
+    counts[paletteIndex]++;
   }
+  return { w: options.w, h: options.h, indices, counts, palette, brand: options.brand, options: { ...options } };
+}
+
+async function convert() {
+  if (!appState.image || isBusy() || appState.operations.upload) return;
+  let options;
+  try {
+    options = getDataOptions();
+  } catch (error) {
+    setMessage('uploadError', errorKey(error, 'errorGridSize'), null, true);
+    return;
+  }
+  const imageSnapshot = appState.image;
+  const revisionSnapshot = appState.dataRevision;
+  const conversionToken = ++appState.conversionToken;
+  setOperationBusy('convert', true, 'converting');
+  try {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const grid = generateGrid(imageSnapshot, options);
+    if (conversionToken !== appState.conversionToken || imageSnapshot !== appState.image || revisionSnapshot !== appState.dataRevision) return;
+    grid.revision = revisionSnapshot;
+    appState.grid = grid;
+    appState.dataStale = false;
+    appState.view.zoom = 1;
+    elements.resultSection.hidden = false;
+    elements.resultSection.classList.remove('is-stale');
+    renderAll();
+    setMessage('resultStatus', 'convertComplete');
+    elements.resultSection.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  } catch (error) {
+    setMessage('resultStatus', errorKey(error, 'errorCanvas'), null, true);
+  } finally {
+    setOperationBusy('convert', false);
+  }
+}
+
+function usedEntries(grid) {
+  const entries = [];
+  for (let index = 0; index < grid.palette.length; index++) {
+    if (grid.counts[index]) entries.push({ ...grid.palette[index], index, count: grid.counts[index] });
+  }
+  return entries;
 }
 
 function luminance(hex) {
@@ -1274,132 +1387,308 @@ function luminance(hex) {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 }
 
+function canvasScale(width, height) {
+  return Math.min(1, MAX_CANVAS_SIDE / Math.max(width, height), Math.sqrt(MAX_CANVAS_PIXELS / (width * height)));
+}
+
+function drawGrid(ctx, grid, settings, scale, originX, originY, bounds) {
+  const cell = settings.cell;
+  const symbols = new Map();
+  usedEntries(grid).forEach((entry, index) => symbols.set(entry.index, SYMBOLS[index % SYMBOLS.length]));
+  ctx.save();
+  ctx.translate(originX || 0, originY || 0);
+  ctx.scale(scale, scale);
+  for (let y = bounds.y; y < bounds.y + bounds.h; y++) {
+    for (let x = bounds.x; x < bounds.x + bounds.w; x++) {
+      const paletteIndex = grid.indices[y * grid.w + x];
+      const color = grid.palette[paletteIndex];
+      const left = (x - bounds.x) * cell;
+      const top = (y - bounds.y) * cell;
+      if (settings.shape === 'circle') {
+        ctx.beginPath(); ctx.arc(left + cell / 2, top + cell / 2, cell * 0.42, 0, Math.PI * 2);
+        ctx.fillStyle = color.hex; ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,0.15)'; ctx.lineWidth = 0.5; ctx.stroke();
+      } else { ctx.fillStyle = color.hex; ctx.fillRect(left + 0.5, top + 0.5, cell - 1, cell - 1); }
+      if (settings.showSymbols && cell >= 10) {
+        ctx.fillStyle = luminance(color.hex) > 0.5 ? '#333' : '#fff';
+        ctx.font = `${Math.max(8, cell * 0.5)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(symbols.get(paletteIndex) || '?', left + cell / 2, top + cell / 2);
+      }
+    }
+  }
+  if (settings.showGrid) {
+    ctx.strokeStyle = 'rgba(0,0,0,0.14)'; ctx.lineWidth = 0.5;
+    for (let x = 0; x <= bounds.w; x++) { ctx.beginPath(); ctx.moveTo(x * cell, 0); ctx.lineTo(x * cell, bounds.h * cell); ctx.stroke(); }
+    for (let y = 0; y <= bounds.h; y++) { ctx.beginPath(); ctx.moveTo(0, y * cell); ctx.lineTo(bounds.w * cell, y * cell); ctx.stroke(); }
+    if (settings.highlight > 0) {
+      ctx.strokeStyle = 'rgba(0,0,0,0.46)'; ctx.lineWidth = 1.8;
+      for (let x = 0; x <= bounds.w; x++) if ((bounds.x + x) % settings.highlight === 0) { ctx.beginPath(); ctx.moveTo(x * cell, 0); ctx.lineTo(x * cell, bounds.h * cell); ctx.stroke(); }
+      for (let y = 0; y <= bounds.h; y++) if ((bounds.y + y) % settings.highlight === 0) { ctx.beginPath(); ctx.moveTo(0, y * cell); ctx.lineTo(bounds.w * cell, y * cell); ctx.stroke(); }
+    }
+  }
+  ctx.restore();
+}
+
+function renderBeads() {
+  const grid = appState.grid;
+  if (!grid) return;
+  const view = getViewOptions();
+  appState.view = view;
+  const cell = Math.max(4, Math.round(16 * view.zoom));
+  const logicalWidth = grid.w * cell;
+  const logicalHeight = grid.h * cell;
+  const scale = canvasScale(logicalWidth, logicalHeight);
+  const canvas = elements.beadCanvas;
+  try {
+    canvas.width = Math.max(1, Math.floor(logicalWidth * scale));
+    canvas.height = Math.max(1, Math.floor(logicalHeight * scale));
+    canvas.style.width = `${logicalWidth}px`;
+    canvas.style.height = `${logicalHeight}px`;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw appError('errorCanvas');
+    ctx.fillStyle = '#f5f3ef'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawGrid(ctx, grid, { ...view, cell }, scale, 0, 0, { x: 0, y: 0, w: grid.w, h: grid.h });
+  } catch (error) {
+    setMessage('resultStatus', 'errorCanvas', null, true);
+  }
+}
+
 function renderLegend() {
-  if (!usedPalette) return;
-  legendItems.innerHTML = '';
-  usedPalette.forEach((c, i) => {
-    const item = document.createElement('div');
-    item.className = 'legend-item';
-    const sym = SYMBOLS[i % SYMBOLS.length];
-    item.innerHTML = `
-      <span class="legend-swatch" style="background:${c.hex}"></span>
-      <span class="legend-symbol">${c.code}</span>
-      <span>${c.name}</span>
-      <span style="color:#999;font-size:0.8rem">(${sym}) ×${c.count}</span>
-    `;
-    legendItems.appendChild(item);
+  if (!appState.grid) return;
+  elements.legendItems.replaceChildren();
+  usedEntries(appState.grid).forEach((entry, index) => {
+    const item = document.createElement('div'); item.className = 'legend-item';
+    const swatch = document.createElement('span'); swatch.className = 'legend-swatch'; swatch.style.backgroundColor = entry.hex;
+    const code = document.createElement('strong'); code.className = 'legend-symbol'; code.textContent = entry.code;
+    const details = document.createElement('span'); details.textContent = `${entry.name} (${SYMBOLS[index % SYMBOLS.length]}) ×${entry.count}`;
+    item.append(swatch, code, details); elements.legendItems.appendChild(item);
   });
 }
 
-function renderBeadCount() {
-  if (!usedPalette) return;
-  const total = usedPalette.reduce((s, c) => s + c.count, 0);
-  const { w, h } = getGridSize();
-  beadCountDiv.innerHTML = `
-    <strong>統計：</strong>
-    尺寸 ${w} × ${h} = ${total} 顆珠子 ｜
-    使用 ${usedPalette.length} 種顏色 ｜
-    品牌：${brand.value.charAt(0).toUpperCase() + brand.value.slice(1)}
-  `;
+function renderStatistics() {
+  if (!appState.grid) return;
+  const grid = appState.grid;
+  elements.beadCount.textContent = tr('stats', { w: grid.w, h: grid.h, total: grid.w * grid.h, colors: usedEntries(grid).length, brand: grid.brand });
 }
 
-function buildExportCanvas() {
-  if (!beadData || !usedPalette) return null;
-  const prevZoom = currentZoom;
-  currentZoom = 2; renderBeads();
-  const beadW = beadCanvas.width, beadH = beadCanvas.height;
+function renderAll() { renderBeads(); renderLegend(); renderStatistics(); }
 
-  // Legend layout
-  const padding = 24;
-  const swatchSize = 18;
-  const rowH = 28;
-  const colW = 220;
-  const cols = Math.max(1, Math.floor((beadW - padding * 2) / colW));
-  const rows = Math.ceil(usedPalette.length / cols);
-  const { w, h } = getGridSize();
-  const total = usedPalette.reduce((s, c) => s + c.count, 0);
+function ensureFreshSnapshot() {
+  if (!appState.grid) { setMessage('resultStatus', 'errorNoPattern', null, true); return null; }
+  if (appState.dataStale) { setMessage('resultStatus', 'staleMessage', null, true); return null; }
+  return appState.grid;
+}
 
-  const headerH = 40;
-  const legendH = headerH + rows * rowH + padding;
-  const fullH = beadH + legendH + padding;
+function buildPatternCanvas(grid, cell, bounds, view) {
+  const logicalWidth = bounds.w * cell;
+  const logicalHeight = bounds.h * cell;
+  const scale = canvasScale(logicalWidth, logicalHeight);
+  if (scale < 1 && (logicalWidth > MAX_CANVAS_SIDE || logicalHeight > MAX_CANVAS_SIDE || logicalWidth * logicalHeight > MAX_CANVAS_PIXELS)) throw appError('errorPngTooLarge');
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.floor(logicalWidth * scale); canvas.height = Math.floor(logicalHeight * scale);
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw appError('errorCanvas');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  drawGrid(ctx, grid, { ...view, cell }, scale, 0, 0, bounds);
+  return canvas;
+}
 
-  const out = document.createElement('canvas');
-  out.width = beadW;
-  out.height = fullH;
-  const ctx = out.getContext('2d');
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob); const link = document.createElement('a');
+  link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
 
-  // Background
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, out.width, out.height);
+function canvasToBlob(canvas, type) {
+  return new Promise((resolve) => canvas.toBlob(resolve, type));
+}
 
-  // Bead pattern
-  ctx.drawImage(beadCanvas, 0, 0);
+async function downloadPng() {
+  const grid = ensureFreshSnapshot();
+  if (!grid || isBusy()) return;
+  setOperationBusy('png', true);
+  try {
+    const canvas = buildPatternCanvas(grid, 20, { x: 0, y: 0, w: grid.w, h: grid.h }, getViewOptions());
+    const blob = await canvasToBlob(canvas, 'image/png');
+    if (!blob) throw appError('errorCanvas');
+    downloadBlob(blob, tr('filenamePng'));
+    setMessage('resultStatus', 'pngReady');
+  } catch (error) {
+    setMessage('resultStatus', errorKey(error, 'errorPngTooLarge'), null, true);
+  } finally {
+    setOperationBusy('png', false);
+  }
+}
 
-  // Divider
-  const legendTop = beadH + padding;
-  ctx.fillStyle = '#e8e4df';
-  ctx.fillRect(padding, legendTop - 1, beadW - padding * 2, 1);
+function createTranslationSnapshot() {
+  const lang = typeof getLang === 'function' ? getLang() : 'zh-TW';
+  const dict = { ...(typeof I18N !== 'undefined' && I18N[lang] ? I18N[lang] : {}) };
+  return {
+    lang,
+    text(key, values) {
+      const template = dict[key] || key;
+      return values ? template.replace(/\{(\w+)\}/g, (_, name) => values[name] == null ? '' : values[name]) : template;
+    }
+  };
+}
 
-  // Title line
-  ctx.fillStyle = '#3a3330';
-  ctx.font = 'bold 16px sans-serif';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(`顏色清單 — ${usedPalette.length} 色 · ${total} 顆 · ${w}×${h}`, padding, legendTop + 18);
+function createPdfCanvas() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1240; canvas.height = 1754;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw appError('errorCanvas');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#282828'; ctx.textBaseline = 'alphabetic';
+  return { canvas, ctx };
+}
 
-  // Color items
-  const startY = legendTop + headerH;
-  usedPalette.forEach((c, i) => {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const x = padding + col * colW;
-    const y = startY + row * rowH;
-    const sym = SYMBOLS[i % SYMBOLS.length];
+function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = Array.from(text);
+  let line = '';
+  for (const word of words) {
+    const next = line + word;
+    if (line && ctx.measureText(next).width > maxWidth) { ctx.fillText(line, x, y); line = word; y += lineHeight; }
+    else line = next;
+  }
+  if (line) ctx.fillText(line, x, y);
+  return y;
+}
 
-    // Swatch
-    ctx.fillStyle = c.hex;
-    ctx.fillRect(x, y + 2, swatchSize, swatchSize);
-    ctx.strokeStyle = 'rgba(0,0,0,0.12)';
-    ctx.lineWidth = 0.5;
-    ctx.strokeRect(x, y + 2, swatchSize, swatchSize);
-
-    // Text
-    ctx.fillStyle = '#3a3330';
-    ctx.font = 'bold 13px sans-serif';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(c.code, x + swatchSize + 6, y + swatchSize / 2 + 2);
-
-    ctx.fillStyle = '#8a8280';
-    ctx.font = '12px sans-serif';
-    const codeW = ctx.measureText(c.code).width;
-    ctx.fillText(`(${sym}) ×${c.count}`, x + swatchSize + 10 + codeW, y + swatchSize / 2 + 2);
+function drawPdfColorEntries(ctx, entries, startIndex, margin, startY, rowHeight, columns, colWidth) {
+  entries.forEach((entry, offset) => {
+    const index = startIndex + offset;
+    const column = offset % columns, row = Math.floor(offset / columns);
+    const x = margin + column * colWidth, y = startY + row * rowHeight;
+    ctx.fillStyle = entry.hex; ctx.fillRect(x, y - 25, 24, 24);
+    ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.strokeRect(x, y - 25, 24, 24);
+    ctx.fillStyle = '#282828'; ctx.font = '700 21px sans-serif'; ctx.fillText(entry.code, x + 34, y - 5);
+    ctx.font = '21px sans-serif'; ctx.fillText(`(${SYMBOLS[index % SYMBOLS.length]}) ×${entry.count}`, x + 116, y - 5);
   });
-
-  currentZoom = prevZoom; renderBeads();
-  return out;
 }
 
-function downloadPng() {
-  const out = buildExportCanvas();
-  if (!out) return;
-  const link = document.createElement('a');
-  link.download = '拼豆圖紙.png';
-  link.href = out.toDataURL('image/png');
-  link.click();
+function createPdfSummaryCanvas(grid, snapshot) {
+  const entries = usedEntries(grid);
+  const margin = 76, columns = 3, rowHeight = 42;
+  const firstRowsStart = 280, laterRowsStart = 210, bottom = 76;
+  const firstCapacity = Math.floor((1754 - firstRowsStart - bottom) / rowHeight) * columns;
+  const laterCapacity = Math.floor((1754 - laterRowsStart - bottom) / rowHeight) * columns;
+  const totalPages = 1 + Math.max(0, Math.ceil((entries.length - firstCapacity) / laterCapacity));
+  const pages = [];
+  let offset = 0;
+
+  for (let page = 1; page <= totalPages; page++) {
+    const { canvas, ctx } = createPdfCanvas();
+    const isFirstPage = page === 1;
+    const startY = isFirstPage ? firstRowsStart : laterRowsStart;
+    const capacity = isFirstPage ? firstCapacity : laterCapacity;
+    const pageEntries = entries.slice(offset, offset + capacity);
+    const colWidth = (canvas.width - margin * 2) / columns;
+
+    if (isFirstPage) {
+      ctx.font = '700 44px sans-serif'; ctx.fillText(snapshot.text('pdfTitle'), margin, 100);
+      ctx.font = '24px sans-serif';
+      drawWrappedText(ctx, snapshot.text('stats', { w: grid.w, h: grid.h, total: grid.w * grid.h, colors: entries.length, brand: grid.brand }), margin, 148, canvas.width - margin * 2, 34);
+      ctx.font = '700 30px sans-serif'; ctx.fillText(snapshot.text('colorList'), margin, 230);
+    } else {
+      ctx.font = '700 34px sans-serif'; ctx.fillText(snapshot.text('colorList'), margin, 100);
+    }
+    ctx.font = '20px sans-serif'; ctx.fillText(snapshot.text('pdfPage', { current: page, total: totalPages }), margin, isFirstPage ? 258 : 146);
+    drawPdfColorEntries(ctx, pageEntries, offset, margin, startY, rowHeight, columns, colWidth);
+    pages.push(canvas);
+    offset += pageEntries.length;
+  }
+  return pages;
 }
 
-function downloadPdf() {
-  const { jsPDF } = window.jspdf;
-  const out = buildExportCanvas();
-  if (!out) return;
-  const imgData = out.toDataURL('image/png');
-  const pdf = new jsPDF({
-    orientation: out.width > out.height ? 'landscape' : 'portrait',
-    unit: 'mm', format: 'a4'
+function createPdfTileCanvas(grid, bounds, view, snapshot, page, total) {
+  const { canvas, ctx } = createPdfCanvas();
+  const title = snapshot.text('pdfTileRange', { rowStart: bounds.y + 1, rowEnd: bounds.y + bounds.h, colStart: bounds.x + 1, colEnd: bounds.x + bounds.w });
+  ctx.font = '700 27px sans-serif'; ctx.fillText(title, 70, 86);
+  ctx.font = '20px sans-serif'; ctx.fillText(snapshot.text('pdfPage', { current: page, total }), 70, 122);
+  const tile = buildPatternCanvas(grid, 18, bounds, view);
+  const availableW = canvas.width - 140, availableH = canvas.height - 240;
+  const ratio = Math.min(availableW / tile.width, availableH / tile.height);
+  const width = Math.floor(tile.width * ratio), height = Math.floor(tile.height * ratio);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(tile, Math.floor((canvas.width - width) / 2), 160, width, height);
+  return canvas;
+}
+
+function addPdfCanvas(pdf, canvas, addPage) {
+  if (addPage) pdf.addPage();
+  const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+  pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pageW, pageH);
+}
+
+function nextFrame() { return new Promise((resolve) => requestAnimationFrame(resolve)); }
+
+async function downloadPdf() {
+  const grid = ensureFreshSnapshot();
+  if (!grid || isBusy()) return;
+  if (!window.jspdf || !window.jspdf.jsPDF) { setMessage('resultStatus', 'errorPdfUnavailable', null, true); return; }
+  const viewSnapshot = { ...getViewOptions() };
+  const languageSnapshot = createTranslationSnapshot();
+  setOperationBusy('pdf', true, 'pdfPreparing');
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    createPdfSummaryCanvas(grid, languageSnapshot).forEach((canvas, index) => addPdfCanvas(pdf, canvas, index > 0));
+    const tileSize = 50;
+    const tilesX = Math.ceil(grid.w / tileSize), tilesY = Math.ceil(grid.h / tileSize);
+    const totalTiles = tilesX * tilesY;
+    let page = 0;
+    for (let tileY = 0; tileY < tilesY; tileY++) {
+      for (let tileX = 0; tileX < tilesX; tileX++) {
+        page++;
+        setMessage('resultStatus', 'pdfProgress', { current: page, total: totalTiles });
+        await nextFrame();
+        const x = tileX * tileSize, y = tileY * tileSize;
+        const bounds = { x, y, w: Math.min(tileSize, grid.w - x), h: Math.min(tileSize, grid.h - y) };
+        addPdfCanvas(pdf, createPdfTileCanvas(grid, bounds, viewSnapshot, languageSnapshot, page, totalTiles), true);
+      }
+    }
+    pdf.save(languageSnapshot.text('filenamePdf'));
+    setMessage('resultStatus', 'pdfReady');
+  } catch (error) {
+    setMessage('resultStatus', errorKey(error, 'errorPdf'), null, true);
+  } finally {
+    setOperationBusy('pdf', false);
+  }
+}
+
+function bindEvents() {
+  const openFilePicker = () => {
+    if (isBusy()) return;
+    elements.fileInput.value = '';
+    elements.fileInput.click();
+  };
+  elements.uploadArea.addEventListener('click', openFilePicker);
+  elements.uploadArea.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFilePicker(); } });
+  elements.uploadArea.addEventListener('dragover', (event) => { event.preventDefault(); elements.uploadArea.classList.add('dragover'); });
+  elements.uploadArea.addEventListener('dragleave', () => elements.uploadArea.classList.remove('dragover'));
+  elements.uploadArea.addEventListener('drop', (event) => { event.preventDefault(); elements.uploadArea.classList.remove('dragover'); handleFile(event.dataTransfer.files[0]); });
+  elements.fileInput.addEventListener('change', (event) => handleFile(event.target.files[0]));
+  const onDataChange = () => {
+    appState.dataRevision++;
+    elements.colorCountVal.textContent = elements.colorCount.value;
+    markDataStale();
+  };
+  elements.boardSize.addEventListener('change', () => { updateCustomSizeVisibility(); onDataChange(); });
+  [elements.customWidth, elements.customHeight, elements.colorCount, elements.brand, elements.imageFit, elements.backgroundColor].forEach((input) => { input.addEventListener('input', onDataChange); input.addEventListener('change', onDataChange); });
+  elements.convertBtn.addEventListener('click', convert);
+  elements.highlightLines.addEventListener('input', () => { elements.highlightVal.textContent = elements.highlightLines.value; if (appState.grid) renderBeads(); });
+  [elements.showGrid, elements.showSymbols, elements.beadShape].forEach((input) => input.addEventListener('change', renderBeads));
+  elements.zoomIn.addEventListener('click', () => { appState.view.zoom = Math.min(appState.view.zoom * 1.25, 8); renderBeads(); });
+  elements.zoomOut.addEventListener('click', () => { appState.view.zoom = Math.max(appState.view.zoom / 1.25, 0.25); renderBeads(); });
+  elements.downloadPng.addEventListener('click', downloadPng);
+  elements.downloadPdf.addEventListener('click', downloadPdf);
+  document.addEventListener('bead:languagechange', () => {
+    Object.keys(appState.messages).forEach(renderMessage);
+    if (appState.grid) { renderLegend(); renderStatistics(); }
+    syncControls();
   });
-  const pageW = pdf.internal.pageSize.getWidth() - 20;
-  const pageH = pdf.internal.pageSize.getHeight() - 20;
-  const ratio = Math.min(pageW / out.width, pageH / out.height);
-  const imgW = out.width * ratio, imgH = out.height * ratio;
-  pdf.addImage(imgData, 'PNG', 10, 10, imgW, imgH);
-  pdf.save('拼豆圖紙.pdf');
+  window.addEventListener('beforeunload', () => { if (appState.objectUrl) URL.revokeObjectURL(appState.objectUrl); });
 }
+
+bindEvents();
+updateCustomSizeVisibility();
+syncControls();

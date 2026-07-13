@@ -29,7 +29,7 @@ const I18N = {
     // Features
     featTitle: "功能特色",
     feat1: "9 大品牌色盤", feat1d: "MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi，共 992 種真實色號",
-    feat2: "多種板子尺寸", feat2d: "29×29、50×50、58×58 或自訂尺寸，靈活搭配你的拼豆板",
+    feat2: "多種板子尺寸", feat2d: "20×20、30×30、40×40、50×50、60×60 或自訂尺寸，靈活搭配你的拼豆板",
     feat3: "符號輔助辨色", feat3d: "開啟符號模式，每個顏色都有專屬符號，不怕搞混相近色",
     feat4: "PDF 含色號清單", feat4d: "下載的 PDF 自動附上顏色清單與用量統計，方便採購",
     // Needs
@@ -55,7 +55,7 @@ const I18N = {
     faq3q: "支援哪些拼豆品牌？",
     faq3a: "目前支援 MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi 共 9 個品牌，992 種真實色號。",
     faq4q: "可以自訂拼豆板的大小嗎？",
-    faq4a: "可以。除了預設的 29×29、50×50 等尺寸外，你也可以自訂任意寬高。",
+    faq4a: "可以。可選擇 20×20、30×30、40×40、50×50、60×60，或設定 10–200 的自訂寬高（總格數最多 40,000）。",
     faq5q: "下載的 PDF 包含什麼？",
     faq5a: "PDF 包含完整的拼豆圖紙、顏色清單、各色號用量統計，方便你採購材料。",
     // Footer
@@ -72,7 +72,7 @@ const I18N = {
     uploadText: "點擊或拖曳圖片到這裡",
     uploadHint: "支援 JPG、PNG、GIF、WebP",
     boardSize: "拼豆板尺寸",
-    boardSmall: "小 (29×29)", boardMed: "中 (50×50)", boardLarge: "大 (58×58)", boardCustom: "自訂",
+    boardSmall: "20×20", boardMed: "30×30", boardLarge: "40×40", boardCustom: "自訂",
     customW: "寬度（珠數）", customH: "高度（珠數）",
     colorCount: "顏色數量",
     brandLabel: "拼豆品牌",
@@ -113,7 +113,7 @@ const I18N = {
     step4: "下载图纸", step4d: "导出 PNG 或 PDF，开始拼豆",
     featTitle: "功能特色",
     feat1: "9 大品牌色盘", feat1d: "MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi，共 992 种真实色号",
-    feat2: "多种板子尺寸", feat2d: "29×29、50×50、58×58 或自定义尺寸，灵活搭配你的拼豆板",
+    feat2: "多种板子尺寸", feat2d: "20×20、30×30、40×40、50×50、60×60 或自定义尺寸，灵活搭配你的拼豆板",
     feat3: "符号辅助辨色", feat3d: "开启符号模式，每个颜色都有专属符号，不怕搞混相近色",
     feat4: "PDF 含色号清单", feat4d: "下载的 PDF 自动附上颜色清单与用量统计，方便采购",
     needsTitle: "开始拼豆你需要",
@@ -135,7 +135,7 @@ const I18N = {
     faq3q: "支持哪些拼豆品牌？",
     faq3a: "目前支持 MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi 共 9 个品牌，992 种真实色号。",
     faq4q: "可以自定义拼豆板的大小吗？",
-    faq4a: "可以。除了预设的 29×29、50×50 等尺寸外，你也可以自定义任意宽高。",
+    faq4a: "可以。可选择 20×20、30×30、40×40、50×50、60×60，或设置 10–200 的自定义宽高（总格数最多 40,000）。",
     faq5q: "下载的 PDF 包含什么？",
     faq5a: "PDF 包含完整的拼豆图纸、颜色清单、各色号用量统计，方便你采购材料。",
     footer: "拼豆图纸生成器 — 免费在线工具 · 色码数据来源",
@@ -150,7 +150,7 @@ const I18N = {
     uploadText: "点击或拖拽图片到这里",
     uploadHint: "支持 JPG、PNG、GIF、WebP",
     boardSize: "拼豆板尺寸",
-    boardSmall: "小 (29×29)", boardMed: "中 (50×50)", boardLarge: "大 (58×58)", boardCustom: "自定义",
+    boardSmall: "20×20", boardMed: "30×30", boardLarge: "40×40", boardCustom: "自定义",
     customW: "宽度（珠数）", customH: "高度（珠数）",
     colorCount: "颜色数量",
     brandLabel: "拼豆品牌",
@@ -191,7 +191,7 @@ const I18N = {
     step4: "Download", step4d: "Export as PNG or PDF, start crafting",
     featTitle: "Features",
     feat1: "9 Brand Palettes", feat1d: "MARD, Hama, Artkal S/R/C/A, Perler, Perler Mini, Nabbi — 992 verified color codes",
-    feat2: "Multiple Board Sizes", feat2d: "29×29, 50×50, 58×58 or custom size to match your pegboard",
+    feat2: "Multiple Board Sizes", feat2d: "20×20, 30×30, 40×40, 50×50, 60×60 or a custom size to match your pegboard",
     feat3: "Symbol Overlay", feat3d: "Enable symbol mode so each color has a unique symbol — no more mixing up similar colors",
     feat4: "PDF with Color List", feat4d: "Downloaded PDF includes color list and bead count for easy shopping",
     needsTitle: "What You Need",
@@ -213,7 +213,7 @@ const I18N = {
     faq3q: "Which bead brands are supported?",
     faq3a: "We support MARD, Hama, Artkal S/R/C/A, Perler, Perler Mini, and Nabbi — 9 brands with 992 verified color codes.",
     faq4q: "Can I customize the board size?",
-    faq4a: "Yes. In addition to preset sizes like 29×29 and 50×50, you can set any custom width and height.",
+    faq4a: "Yes. Choose 20×20, 30×30, 40×40, 50×50, 60×60, or set a custom 10–200 width and height (up to 40,000 cells).",
     faq5q: "What does the downloaded PDF include?",
     faq5a: "The PDF includes the full bead pattern, a color list, and bead count per color for easy shopping.",
     footer: "Bead Pattern Maker — Free Online Tool · Color data from",
@@ -228,7 +228,7 @@ const I18N = {
     uploadText: "Click or drag an image here",
     uploadHint: "Supports JPG, PNG, GIF, WebP",
     boardSize: "Board Size",
-    boardSmall: "Small (29×29)", boardMed: "Medium (50×50)", boardLarge: "Large (58×58)", boardCustom: "Custom",
+    boardSmall: "20×20", boardMed: "30×30", boardLarge: "40×40", boardCustom: "Custom",
     customW: "Width (beads)", customH: "Height (beads)",
     colorCount: "Color Count",
     brandLabel: "Bead Brand",
@@ -269,7 +269,7 @@ const I18N = {
     step4: "ダウンロード", step4d: "PNG または PDF で出力",
     featTitle: "機能紹介",
     feat1: "9ブランド対応", feat1d: "MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi — 計992色",
-    feat2: "複数ボードサイズ", feat2d: "29×29、50×50、58×58またはカスタムサイズ",
+    feat2: "複数ボードサイズ", feat2d: "20×20、30×30、40×40、50×50、60×60、またはカスタムサイズ",
     feat3: "記号オーバーレイ", feat3d: "記号モードで各色に固有の記号を表示、似た色の混同を防止",
     feat4: "PDF色番号リスト付き", feat4d: "ダウンロードPDFに色リストと使用数を自動添付",
     needsTitle: "必要なもの",
@@ -291,7 +291,7 @@ const I18N = {
     faq3q: "どのビーズブランドに対応していますか？",
     faq3a: "MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi の 9 ブランド、計 992 色に対応しています。",
     faq4q: "ボードサイズをカスタマイズできますか？",
-    faq4a: "はい。29×29、50×50 などのプリセットに加え、任意のサイズを設定できます。",
+    faq4a: "はい。20×20、30×30、40×40、50×50、60×60を選ぶか、10～200の任意サイズを設定できます（最大40,000マス）。",
     faq5q: "ダウンロードした PDF には何が含まれますか？",
     faq5a: "PDF にはビーズ図案、カラーリスト、各色の使用数が含まれており、材料の購入に便利です。",
     footer: "アイロンビーズ図案メーカー — 無料オンラインツール · カラーデータ：",
@@ -306,7 +306,7 @@ const I18N = {
     uploadText: "クリックまたは画像をドラッグ",
     uploadHint: "JPG、PNG、GIF、WebP 対応",
     boardSize: "ボードサイズ",
-    boardSmall: "小 (29×29)", boardMed: "中 (50×50)", boardLarge: "大 (58×58)", boardCustom: "カスタム",
+    boardSmall: "20×20", boardMed: "30×30", boardLarge: "40×40", boardCustom: "カスタム",
     customW: "幅（ビーズ数）", customH: "高さ（ビーズ数）",
     colorCount: "色数",
     brandLabel: "ビーズブランド",
@@ -347,7 +347,7 @@ const I18N = {
     step4: "다운로드", step4d: "PNG 또는 PDF로 내보내기",
     featTitle: "기능 소개",
     feat1: "9개 브랜드 팔레트", feat1d: "MARD, Hama, Artkal S/R/C/A, Perler, Perler Mini, Nabbi — 총 992색",
-    feat2: "다양한 보드 크기", feat2d: "29×29, 50×50, 58×58 또는 사용자 정의 크기",
+    feat2: "다양한 보드 크기", feat2d: "20×20, 30×30, 40×40, 50×50, 60×60 또는 사용자 정의 크기",
     feat3: "기호 오버레이", feat3d: "기호 모드로 각 색상에 고유 기호를 표시하여 유사한 색상 혼동 방지",
     feat4: "PDF 색상 목록 포함", feat4d: "다운로드 PDF에 색상 목록과 사용량 통계 자동 포함",
     needsTitle: "필요한 것들",
@@ -369,7 +369,7 @@ const I18N = {
     faq3q: "어떤 비즈 브랜드를 지원하나요?",
     faq3a: "MARD, Hama, Artkal S/R/C/A, Perler, Perler Mini, Nabbi 총 9개 브랜드, 992가지 색상 코드를 지원합니다.",
     faq4q: "보드 크기를 사용자 정의할 수 있나요?",
-    faq4a: "네. 29×29, 50×50 등 프리셋 외에도 원하는 크기를 자유롭게 설정할 수 있습니다.",
+    faq4a: "네. 20×20, 30×30, 40×40, 50×50, 60×60을 선택하거나 10–200의 사용자 정의 너비와 높이를 설정할 수 있습니다(최대 40,000칸).",
     faq5q: "다운로드한 PDF에는 무엇이 포함되나요?",
     faq5a: "PDF에는 비즈 도안, 색상 목록, 각 색상별 사용량이 포함되어 재료 구매에 편리합니다.",
     footer: "비즈 도안 메이커 — 무료 온라인 도구 · 색상 데이터:",
@@ -384,7 +384,7 @@ const I18N = {
     uploadText: "클릭하거나 이미지를 드래그하세요",
     uploadHint: "JPG, PNG, GIF, WebP 지원",
     boardSize: "보드 크기",
-    boardSmall: "소 (29×29)", boardMed: "중 (50×50)", boardLarge: "대 (58×58)", boardCustom: "사용자 정의",
+    boardSmall: "20×20", boardMed: "30×30", boardLarge: "40×40", boardCustom: "사용자 정의",
     customW: "너비 (비즈 수)", customH: "높이 (비즈 수)",
     colorCount: "색상 수",
     brandLabel: "비즈 브랜드",
@@ -412,76 +412,8 @@ const LANG_LABELS = {
   "ko": "한국어"
 };
 
-function getLang() {
-  return localStorage.getItem('bead-lang') || 'zh-TW';
-}
-
-function setLang(lang) {
-  localStorage.setItem('bead-lang', lang);
-  applyLang(lang);
-}
-
-function t(key) {
-  var lang = getLang();
-  return (I18N[lang] && I18N[lang][key]) || (I18N['zh-TW'][key]) || key;
-}
-
-function applyLang(lang) {
-  if (!lang) lang = getLang();
-  var dict = I18N[lang] || I18N['zh-TW'];
-  document.querySelectorAll('[data-i18n]').forEach(function(el) {
-    var key = el.getAttribute('data-i18n');
-    if (dict[key]) {
-      if (el.tagName === 'INPUT' && el.type !== 'checkbox') {
-        el.placeholder = dict[key];
-      } else if (el.tagName === 'OPTION') {
-        el.textContent = dict[key];
-      } else {
-        el.innerHTML = dict[key];
-      }
-    }
-  });
-  // Update html lang
-  document.documentElement.lang = lang === 'zh-TW' ? 'zh-TW' : lang === 'zh-CN' ? 'zh-CN' : lang;
-  // Update lang selector display
-  var sel = document.getElementById('langSelect');
-  if (sel) sel.value = lang;
-}
-
-// Build language selector HTML
-function buildLangSelector() {
-  var current = getLang();
-  var html = '<select id="langSelect" class="lang-select" aria-label="Language">';
-  for (var code in LANG_LABELS) {
-    html += '<option value="' + code + '"' + (code === current ? ' selected' : '') + '>' + LANG_LABELS[code] + '</option>';
-  }
-  html += '</select>';
-  return html;
-}
-
-// Auto-init on load
-document.addEventListener('DOMContentLoaded', function() {
-  // Insert lang selector into nav or header
-  var navInner = document.querySelector('.nav-inner');
-  var header = document.querySelector('header');
-  if (navInner) {
-    var div = document.createElement('div');
-    div.className = 'lang-wrap';
-    div.innerHTML = buildLangSelector();
-    navInner.appendChild(div);
-  } else if (header) {
-    var div = document.createElement('div');
-    div.className = 'lang-wrap-header';
-    div.innerHTML = buildLangSelector();
-    header.appendChild(div);
-  }
-  // Bind change
-  var sel = document.getElementById('langSelect');
-  if (sel) sel.addEventListener('change', function() { setLang(this.value); });
-  // Apply
-  applyLang(getLang());
-
-  // ===== Animated Logo =====
+// ===== Animated Logo =====
+function initializeLogo() {
   var logoCanvases = document.querySelectorAll('.logo-canvas');
   if (logoCanvases.length) {
     var logoHeart = [
@@ -547,4 +479,70 @@ document.addEventListener('DOMContentLoaded', function() {
     drawLogo();
     setInterval(drawLogo, 3500);
   }
+}
+
+// Upgrade-safe translation and language-selector layer.
+Object.assign(I18N['zh-TW'], {
+  pageTitleHome: '拼豆圖紙產生器 - 免費線上工具', pageTitleEditor: '拼豆圖紙產生器', pageTitlePrivacy: '隱私權政策', pageTitleTerms: '使用條款',
+  feat2d: '20×20、30×30、40×40、50×50、60×60 或自訂尺寸，靈活搭配你的拼豆板',
+  faq4a: '可以。可選擇 20×20、30×30、40×40、50×50、60×60，或設定 10–200 的自訂寬高（總格數最多 40,000）。',
+  uploadHint: '支援 JPG、PNG、GIF、WebP，最大 15 MB', uploadLoading: '正在讀取圖片…', uploadReady: '已載入：{name}',
+  errorFileTooLarge: '圖片檔案不能超過 15 MB。', errorFileType: '請選擇 JPG、PNG、GIF 或 WebP 圖片。', errorImageBroken: '無法讀取這張圖片，檔案可能已損壞。', errorImagePixels: '圖片超過 2,000 萬像素，請先縮小後再試。', errorGridSize: '自訂尺寸每邊需為 10–200，且總格數不能超過 40,000。', errorCanvas: '瀏覽器無法建立繪圖畫布。請縮小尺寸或重新載入後再試。', errorPngTooLarge: 'PNG 圖紙過大，請改用 PDF 匯出。', errorPdfUnavailable: 'PDF 匯出工具尚未載入。請檢查網路後重試。', errorPdf: '無法產生 PDF，請再試一次。', errorNoPattern: '請先產生圖紙。',
+  ariaUpload: '上傳圖片。按 Enter 或空白鍵選擇檔案，也可拖曳圖片到此處。', ariaPattern: '拼豆圖紙預覽，可使用捲動區域檢視。',
+  sizeLimitHint: '每邊 10–200，總格數最多 40,000', fitMode: '圖片適配', fitContain: '完整顯示（留白）', fitCover: '填滿並裁切', fitStretch: '拉伸填滿', backgroundColor: '背景色（透明像素）',
+  staleMessage: '設定已變更。請重新轉換後再匯出。', converting: '正在產生圖紙…', convertComplete: '圖紙已產生。', downloadPng: '↓ PNG', downloadPdf: '↓ PDF', pngReady: 'PNG 已開始下載。', pdfPreparing: '正在準備 PDF…', pdfProgress: '正在產生 PDF：第 {current}/{total} 張圖紙頁', pdfReady: 'PDF 已開始下載。', pdfTitle: '拼豆圖紙摘要', pdfTileRange: '全域列 {rowStart}–{rowEnd}・欄 {colStart}–{colEnd}', pdfPage: '圖紙頁 {current}/{total}', filenamePng: '拼豆圖紙.png', filenamePdf: '拼豆圖紙.pdf', stats: '尺寸 {w} × {h}＝{total} 顆珠子｜{colors} 種顏色｜品牌：{brand}'
+});
+Object.assign(I18N['zh-CN'], {
+  pageTitleHome: '拼豆图纸生成器 - 免费在线工具', pageTitleEditor: '拼豆图纸生成器', pageTitlePrivacy: '隐私政策', pageTitleTerms: '使用条款',
+  feat2d: '20×20、30×30、40×40、50×50、60×60 或自定义尺寸，灵活搭配你的拼豆板', faq4a: '可以。可选择 20×20、30×30、40×40、50×50、60×60，或设置 10–200 的自定义宽高（总格数最多 40,000）。',
+  uploadHint: '支持 JPG、PNG、GIF、WebP，最大 15 MB', uploadLoading: '正在读取图片…', uploadReady: '已载入：{name}', errorFileTooLarge: '图片文件不能超过 15 MB。', errorFileType: '请选择 JPG、PNG、GIF 或 WebP 图片。', errorImageBroken: '无法读取这张图片，文件可能已损坏。', errorImagePixels: '图片超过 2,000 万像素，请先缩小后再试。', errorGridSize: '自定义尺寸每边须为 10–200，且总格数不能超过 40,000。', errorCanvas: '浏览器无法创建绘图画布。请缩小尺寸或重新加载后再试。', errorPngTooLarge: 'PNG 图纸过大，请改用 PDF 导出。', errorPdfUnavailable: 'PDF 导出工具尚未加载。请检查网络后重试。', errorPdf: '无法生成 PDF，请再试一次。', errorNoPattern: '请先生成图纸。', ariaUpload: '上传图片。按 Enter 或空格键选择文件，也可拖拽图片到此处。', ariaPattern: '拼豆图纸预览，可使用滚动区域查看。', sizeLimitHint: '每边 10–200，总格数最多 40,000', fitMode: '图片适配', fitContain: '完整显示（留白）', fitCover: '填满并裁切', fitStretch: '拉伸填满', backgroundColor: '背景色（透明像素）', staleMessage: '设置已变更。请重新转换后再导出。', converting: '正在生成图纸…', convertComplete: '图纸已生成。', downloadPng: '↓ PNG', downloadPdf: '↓ PDF', pngReady: 'PNG 已开始下载。', pdfPreparing: '正在准备 PDF…', pdfProgress: '正在生成 PDF：第 {current}/{total} 张图纸页', pdfReady: 'PDF 已开始下载。', pdfTitle: '拼豆图纸摘要', pdfTileRange: '全局行 {rowStart}–{rowEnd}・列 {colStart}–{colEnd}', pdfPage: '图纸页 {current}/{total}', filenamePng: '拼豆图纸.png', filenamePdf: '拼豆图纸.pdf', stats: '尺寸 {w} × {h}＝{total} 颗珠子｜{colors} 种颜色｜品牌：{brand}'
+});
+Object.assign(I18N.en, {
+  pageTitleHome: 'Bead Pattern Maker - Free Online Tool', pageTitleEditor: 'Bead Pattern Maker', pageTitlePrivacy: 'Privacy Policy', pageTitleTerms: 'Terms of Use',
+  feat2d: '20×20, 30×30, 40×40, 50×50, 60×60 or a custom size to match your pegboard', faq4a: 'Yes. Choose 20×20, 30×30, 40×40, 50×50, 60×60, or set a custom 10–200 width and height (up to 40,000 cells).',
+  uploadHint: 'JPG, PNG, GIF, WebP · up to 15 MB', uploadLoading: 'Reading image…', uploadReady: 'Loaded: {name}', errorFileTooLarge: 'Image files must be 15 MB or smaller.', errorFileType: 'Choose a JPG, PNG, GIF, or WebP image.', errorImageBroken: 'This image could not be read. The file may be corrupted.', errorImagePixels: 'This image exceeds 20 megapixels. Please resize it and try again.', errorGridSize: 'Custom dimensions must be 10–200 per side and no more than 40,000 cells.', errorCanvas: 'Your browser could not create the drawing canvas. Reduce the size or reload and try again.', errorPngTooLarge: 'This PNG pattern is too large. Please export it as a PDF instead.', errorPdfUnavailable: 'The PDF export tool has not loaded. Check your connection and try again.', errorPdf: 'The PDF could not be created. Please try again.', errorNoPattern: 'Create a pattern first.', ariaUpload: 'Upload an image. Press Enter or Space to choose a file, or drag an image here.', ariaPattern: 'Bead pattern preview. Use the scroll area to inspect the pattern.', sizeLimitHint: '10–200 per side, 40,000 cells maximum', fitMode: 'Image fit', fitContain: 'Fit (letterbox)', fitCover: 'Fill and crop', fitStretch: 'Stretch to fill', backgroundColor: 'Background color (transparent pixels)', staleMessage: 'Settings changed. Convert again before exporting.', converting: 'Creating pattern…', convertComplete: 'Pattern created.', downloadPng: '↓ PNG', downloadPdf: '↓ PDF', pngReady: 'PNG download started.', pdfPreparing: 'Preparing PDF…', pdfProgress: 'Creating PDF: pattern page {current}/{total}', pdfReady: 'PDF download started.', pdfTitle: 'Bead Pattern Summary', pdfTileRange: 'Global rows {rowStart}–{rowEnd} · columns {colStart}–{colEnd}', pdfPage: 'Pattern page {current}/{total}', filenamePng: 'bead-pattern.png', filenamePdf: 'bead-pattern.pdf', stats: 'Size {w} × {h} = {total} beads | {colors} colors | Brand: {brand}'
+});
+Object.assign(I18N.ja, {
+  pageTitleHome: 'アイロンビーズ図案メーカー - 無料オンラインツール', pageTitleEditor: 'アイロンビーズ図案メーカー', pageTitlePrivacy: 'プライバシーポリシー', pageTitleTerms: '利用規約', feat2d: '20×20、30×30、40×40、50×50、60×60、またはカスタムサイズに対応', faq4a: 'はい。20×20、30×30、40×40、50×50、60×60を選ぶか、10～200の任意サイズを設定できます（最大40,000マス）。', uploadHint: 'JPG、PNG、GIF、WebP対応・最大15 MB', uploadLoading: '画像を読み込み中…', uploadReady: '読み込み完了：{name}', errorFileTooLarge: '画像ファイルは15 MB以下にしてください。', errorFileType: 'JPG、PNG、GIF、WebP画像を選択してください。', errorImageBroken: '画像を読み込めません。ファイルが破損している可能性があります。', errorImagePixels: '画像が2,000万画素を超えています。縮小してから再試行してください。', errorGridSize: 'カスタムサイズは一辺10～200、合計40,000マス以下にしてください。', errorCanvas: 'ブラウザで描画キャンバスを作成できません。サイズを小さくするか、再読み込みしてください。', errorPngTooLarge: 'PNG図案が大きすぎます。代わりにPDFで出力してください。', errorPdfUnavailable: 'PDF出力ツールを読み込めません。接続を確認して再試行してください。', errorPdf: 'PDFを作成できませんでした。もう一度お試しください。', errorNoPattern: '先に図案を作成してください。', ariaUpload: '画像をアップロードします。Enterまたはスペースでファイルを選択するか、ここに画像をドラッグします。', ariaPattern: 'ビーズ図案プレビュー。スクロール領域で図案を確認できます。', sizeLimitHint: '一辺10～200、最大40,000マス', fitMode: '画像の配置', fitContain: '全体を表示（余白あり）', fitCover: '塗りつぶしてトリミング', fitStretch: '引き伸ばして塗りつぶす', backgroundColor: '背景色（透明ピクセル）', staleMessage: '設定が変更されました。出力前にもう一度変換してください。', converting: '図案を作成中…', convertComplete: '図案を作成しました。', downloadPng: '↓ PNG', downloadPdf: '↓ PDF', pngReady: 'PNGのダウンロードを開始しました。', pdfPreparing: 'PDFを準備中…', pdfProgress: 'PDF作成中：図案ページ {current}/{total}', pdfReady: 'PDFのダウンロードを開始しました。', pdfTitle: 'ビーズ図案の概要', pdfTileRange: '全体 行 {rowStart}～{rowEnd}・列 {colStart}～{colEnd}', pdfPage: '図案ページ {current}/{total}', filenamePng: 'bead-pattern.png', filenamePdf: 'bead-pattern.pdf', stats: 'サイズ {w} × {h}＝{total}個｜{colors}色｜ブランド：{brand}'
+});
+Object.assign(I18N.ko, {
+  pageTitleHome: '비즈 도안 메이커 - 무료 온라인 도구', pageTitleEditor: '비즈 도안 메이커', pageTitlePrivacy: '개인정보 처리방침', pageTitleTerms: '이용약관', feat2d: '20×20, 30×30, 40×40, 50×50, 60×60 또는 사용자 정의 크기 지원', faq4a: '네. 20×20, 30×30, 40×40, 50×50, 60×60을 선택하거나 10–200의 사용자 정의 너비와 높이를 설정할 수 있습니다(최대 40,000칸).', uploadHint: 'JPG, PNG, GIF, WebP 지원 · 최대 15 MB', uploadLoading: '이미지를 읽는 중…', uploadReady: '불러옴: {name}', errorFileTooLarge: '이미지 파일은 15 MB 이하여야 합니다.', errorFileType: 'JPG, PNG, GIF 또는 WebP 이미지를 선택하세요.', errorImageBroken: '이미지를 읽을 수 없습니다. 파일이 손상되었을 수 있습니다.', errorImagePixels: '이미지가 2,000만 픽셀을 초과합니다. 크기를 줄인 뒤 다시 시도하세요.', errorGridSize: '사용자 정의 크기는 한 변 10–200, 총 40,000칸 이하여야 합니다.', errorCanvas: '브라우저에서 그리기 캔버스를 만들 수 없습니다. 크기를 줄이거나 새로고침 후 다시 시도하세요.', errorPngTooLarge: 'PNG 도안이 너무 큽니다. PDF로 내보내세요.', errorPdfUnavailable: 'PDF 내보내기 도구가 로드되지 않았습니다. 연결을 확인하고 다시 시도하세요.', errorPdf: 'PDF를 만들 수 없습니다. 다시 시도하세요.', errorNoPattern: '먼저 도안을 만드세요.', ariaUpload: '이미지를 업로드합니다. Enter 또는 스페이스바로 파일을 선택하거나 여기에 이미지를 끌어다 놓으세요.', ariaPattern: '비즈 도안 미리보기입니다. 스크롤 영역에서 도안을 확인할 수 있습니다.', sizeLimitHint: '한 변 10–200, 최대 40,000칸', fitMode: '이미지 맞춤', fitContain: '전체 표시(여백)', fitCover: '채우고 자르기', fitStretch: '늘려서 채우기', backgroundColor: '배경색(투명 픽셀)', staleMessage: '설정이 변경되었습니다. 내보내기 전에 다시 변환하세요.', converting: '도안을 만드는 중…', convertComplete: '도안을 만들었습니다.', downloadPng: '↓ PNG', downloadPdf: '↓ PDF', pngReady: 'PNG 다운로드를 시작했습니다.', pdfPreparing: 'PDF를 준비하는 중…', pdfProgress: 'PDF 생성 중: 도안 페이지 {current}/{total}', pdfReady: 'PDF 다운로드를 시작했습니다.', pdfTitle: '비즈 도안 요약', pdfTileRange: '전체 행 {rowStart}–{rowEnd} · 열 {colStart}–{colEnd}', pdfPage: '도안 페이지 {current}/{total}', filenamePng: 'bead-pattern.png', filenamePdf: 'bead-pattern.pdf', stats: '크기 {w} × {h} = 비즈 {total}개 | 색상 {colors}개 | 브랜드: {brand}'
+});
+
+Object.assign(I18N['zh-TW'], { ariaPatternSettings: '圖紙設定', ariaMainNav: '主要導覽', ariaPatternAnimation: '拼豆圖紙動畫', ariaLanguageSelector: '選擇語言', legalLanguageNote: '介面提供五種語言；本法律頁正文目前僅提供英文／繁體中文參考文本。' });
+Object.assign(I18N['zh-CN'], { ariaPatternSettings: '图纸设置', ariaMainNav: '主要导航', ariaPatternAnimation: '拼豆图纸动画', ariaLanguageSelector: '选择语言', legalLanguageNote: '界面提供五种语言；本法律页正文目前仅提供英文／繁体中文参考文本。' });
+Object.assign(I18N.en, { ariaPatternSettings: 'Pattern settings', ariaMainNav: 'Main navigation', ariaPatternAnimation: 'Bead pattern animation', ariaLanguageSelector: 'Select language', legalLanguageNote: 'The interface is available in five languages. This legal-page body is currently provided as English / Traditional Chinese reference text.' });
+Object.assign(I18N.ja, { ariaPatternSettings: '図案設定', ariaMainNav: 'メインナビゲーション', ariaPatternAnimation: 'ビーズ図案アニメーション', ariaLanguageSelector: '言語を選択', legalLanguageNote: 'インターフェースは5言語に対応しています。法的ページ本文は現在、英語／繁体字中国語の参考テキストのみです。' });
+Object.assign(I18N.ko, { ariaPatternSettings: '도안 설정', ariaMainNav: '주요 탐색', ariaPatternAnimation: '비즈 도안 애니메이션', ariaLanguageSelector: '언어 선택', legalLanguageNote: '인터페이스는 5개 언어를 지원합니다. 이 법률 페이지 본문은 현재 영어/번체 중국어 참고 텍스트만 제공합니다.' });
+
+function safeStorageGet(key) { try { return window.localStorage.getItem(key); } catch (_) { return null; } }
+function safeStorageSet(key, value) { try { window.localStorage.setItem(key, value); } catch (_) {} }
+function getLang() { return safeStorageGet('bead-lang') || 'zh-TW'; }
+function t(key) { const lang = getLang(); return (I18N[lang] && I18N[lang][key]) || I18N['zh-TW'][key] || key; }
+function applyLang(lang) {
+  lang = I18N[lang] ? lang : getLang();
+  const dict = I18N[lang] || I18N['zh-TW'];
+  document.querySelectorAll('[data-i18n]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n')]; if (value != null) el.textContent = value; });
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n-html')]; if (value != null) el.innerHTML = value; });
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n-aria-label')]; if (value != null) el.setAttribute('aria-label', value); });
+  document.documentElement.lang = lang;
+  const pageTitle = document.body && document.body.getAttribute('data-page-title'); if (pageTitle) document.title = dict[pageTitle] || document.title;
+  document.querySelectorAll('#langSelect').forEach(function(select) { select.value = lang; });
+  document.dispatchEvent(new CustomEvent('bead:languagechange', { detail: { lang: lang } }));
+}
+function setLang(lang) { safeStorageSet('bead-lang', lang); applyLang(lang); }
+function mountLangSelectors() {
+  const mounts = document.querySelectorAll('[data-lang-mount]');
+  document.querySelectorAll('.lang-wrap, .lang-wrap-header').forEach(function(el) { el.remove(); });
+  mounts.forEach(function(mount, index) {
+    mount.replaceChildren();
+    const select = document.createElement('select'); select.id = index === 0 ? 'langSelect' : ''; select.className = 'lang-select'; select.setAttribute('data-i18n-aria-label', 'ariaLanguageSelector');
+    Object.keys(LANG_LABELS).forEach(function(code) { const option = document.createElement('option'); option.value = code; option.textContent = LANG_LABELS[code]; select.appendChild(option); });
+    select.value = getLang(); select.addEventListener('change', function() { setLang(select.value); }); mount.appendChild(select);
+  });
+}
+document.addEventListener('DOMContentLoaded', function() {
+  mountLangSelectors();
+  applyLang(getLang());
+  initializeLogo();
 });

@@ -776,3 +776,21 @@
   .demo-bead { animation: none; }
   .fade-in { opacity: 1; transform: none; transition: none; }
 }
+
+@media (max-width: 700px) {
+  .nav-inner { padding: .65rem .8rem; gap: .55rem; }
+  .nav-logo { min-width: 0; font-size: .86rem; }
+  .nav-logo span { overflow-wrap: anywhere; }
+  .nav-actions { gap: .4rem; }
+  .nav-cta { padding: .45rem .55rem; white-space: nowrap; }
+  .landing-main { padding: 0 .9rem 1.5rem; }
+  .brands-list { min-width: 0; }
+  .demo-section, .steps-section, .needs-section, .faq-section { padding: 1.6rem 1rem; }
+}
+
+@media (max-width: 420px) {
+  .nav-logo .logo-canvas { width: 28px; height: 28px; }
+  .nav-logo { font-size: .76rem; }
+  .lang-select { max-width: 88px; font-size: .7rem; padding-left: .35rem; }
+  .nav-cta { font-size: .76rem; }
+}
