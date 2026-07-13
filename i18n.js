@@ -515,6 +515,43 @@ Object.assign(I18N.en, { ariaPatternSettings: 'Pattern settings', ariaMainNav: '
 Object.assign(I18N.ja, { ariaPatternSettings: '図案設定', ariaMainNav: 'メインナビゲーション', ariaPatternAnimation: 'ビーズ図案アニメーション', ariaLanguageSelector: '言語を選択', legalLanguageNote: 'インターフェースは5言語に対応しています。法的ページ本文は現在、英語／繁体字中国語の参考テキストのみです。' });
 Object.assign(I18N.ko, { ariaPatternSettings: '도안 설정', ariaMainNav: '주요 탐색', ariaPatternAnimation: '비즈 도안 애니메이션', ariaLanguageSelector: '언어 선택', legalLanguageNote: '인터페이스는 5개 언어를 지원합니다. 이 법률 페이지 본문은 현재 영어/번체 중국어 참고 텍스트만 제공합니다.' });
 
+// Landing v2 homepage copy. Kept here so editor translations remain isolated above.
+Object.assign(I18N['zh-TW'], {
+  previewWindowTitle: '拼豆圖紙預覽', previewInput: '輸入圖片', previewOutput: '拼豆輸出', previewSourceAlt: '範例輸入圖片', previewPatternAlt: '範例拼豆圖紙輸出',
+  previewFitLegend: '圖片適配', previewFit: 'Fit', previewFill: 'Fill', previewStretch: 'Stretch', previewBackground: '背景色', previewStatus: '預覽已更新：',
+  trustBrands: '品牌／992 種色號', trustLanguages: '種介面語言', trustPrivate: '圖片只在瀏覽器中處理', brandsMore: '+ 4 種色盤',
+  featuresKicker: '新版編輯器', featureFitTitle: 'Fit、Fill、Stretch', featureFitDesc: '依圖片內容選擇完整顯示、裁切填滿或拉伸填滿。', featureBackgroundTitle: '透明背景色', featureBackgroundDesc: '替透明像素挑選背景色，先在預覽中確認成品效果。', featureSafetyTitle: '安全尺寸保護', featureSafetyDesc: '自訂 10–200 格，總格數最高 40,000，避免意外建立過大的圖紙。', featurePdfTitle: '可製作的 PDF', featurePdfDesc: '匯出摘要、色號清單與 50×50 分頁圖紙，方便邊做邊核對。', mobileCta: '開始製作圖紙',
+  ariaProductPreview: '拼豆圖紙產品預覽', ariaPreviewControls: '預覽控制項', ariaPreviewBackground: '選擇預覽背景色', ariaTrustFacts: '產品可信度資訊', ariaBrandList: '支援的拼豆品牌清單'
+});
+Object.assign(I18N['zh-CN'], {
+  previewWindowTitle: '拼豆图纸预览', previewInput: '输入图片', previewOutput: '拼豆输出', previewSourceAlt: '示例输入图片', previewPatternAlt: '示例拼豆图纸输出',
+  previewFitLegend: '图片适配', previewFit: 'Fit', previewFill: 'Fill', previewStretch: 'Stretch', previewBackground: '背景色', previewStatus: '预览已更新：',
+  trustBrands: '品牌／992 种色号', trustLanguages: '种界面语言', trustPrivate: '图片仅在浏览器中处理', brandsMore: '+ 4 种色盘',
+  featuresKicker: '新版编辑器', featureFitTitle: 'Fit、Fill、Stretch', featureFitDesc: '根据图片内容选择完整显示、裁切填满或拉伸填满。', featureBackgroundTitle: '透明背景色', featureBackgroundDesc: '为透明像素选择背景色，先在预览中确认成品效果。', featureSafetyTitle: '安全尺寸保护', featureSafetyDesc: '自定义 10–200 格，总格数最高 40,000，避免意外创建过大的图纸。', featurePdfTitle: '适合制作的 PDF', featurePdfDesc: '导出摘要、色号清单和 50×50 分页图纸，方便边做边核对。', mobileCta: '开始制作图纸',
+  ariaProductPreview: '拼豆图纸产品预览', ariaPreviewControls: '预览控件', ariaPreviewBackground: '选择预览背景色', ariaTrustFacts: '产品可信度信息', ariaBrandList: '支持的拼豆品牌列表'
+});
+Object.assign(I18N.en, {
+  previewWindowTitle: 'Bead pattern preview', previewInput: 'Input image', previewOutput: 'Bead output', previewSourceAlt: 'Example input image', previewPatternAlt: 'Example bead pattern output',
+  previewFitLegend: 'Image framing', previewFit: 'Fit', previewFill: 'Fill', previewStretch: 'Stretch', previewBackground: 'Background', previewStatus: 'Preview updated:',
+  trustBrands: 'brands / 992 color codes', trustLanguages: 'interface languages', trustPrivate: 'images processed in your browser', brandsMore: '+ 4 palettes',
+  featuresKicker: 'New editor', featureFitTitle: 'Fit, Fill, Stretch', featureFitDesc: 'Choose to show the whole image, fill and crop, or stretch to fit.', featureBackgroundTitle: 'Transparent background color', featureBackgroundDesc: 'Choose a background for transparent pixels and check the result first.', featureSafetyTitle: 'Safe size limits', featureSafetyDesc: 'Use a custom 10–200 grid with a 40,000-cell cap to prevent accidental oversized patterns.', featurePdfTitle: 'Craft-ready PDF', featurePdfDesc: 'Export a summary, color-code list, and 50×50 tiled pattern pages for easy checking.', mobileCta: 'Create a pattern',
+  ariaProductPreview: 'Bead pattern product preview', ariaPreviewControls: 'Preview controls', ariaPreviewBackground: 'Choose preview background color', ariaTrustFacts: 'Product trust information', ariaBrandList: 'Supported bead brands'
+});
+Object.assign(I18N.ja, {
+  previewWindowTitle: 'ビーズ図案プレビュー', previewInput: '入力画像', previewOutput: 'ビーズ出力', previewSourceAlt: '入力画像の例', previewPatternAlt: 'ビーズ図案出力の例',
+  previewFitLegend: '画像の配置', previewFit: 'Fit', previewFill: 'Fill', previewStretch: 'Stretch', previewBackground: '背景色', previewStatus: 'プレビューを更新しました：',
+  trustBrands: 'ブランド／992色', trustLanguages: '対応言語', trustPrivate: '画像はブラウザ内で処理', brandsMore: '+ 4 パレット',
+  featuresKicker: '新しいエディター', featureFitTitle: 'Fit・Fill・Stretch', featureFitDesc: '全体表示、トリミングして塗りつぶし、引き伸ばしから選べます。', featureBackgroundTitle: '透明背景色', featureBackgroundDesc: '透明ピクセルの背景色を選び、完成イメージを事前に確認できます。', featureSafetyTitle: '安全なサイズ制限', featureSafetyDesc: '10～200マス、最大40,000マスの制限で大きすぎる図案を防ぎます。', featurePdfTitle: '作りやすい PDF', featurePdfDesc: '概要、色番号リスト、50×50の分割図案ページをPDFに出力できます。', mobileCta: '図案を作成する',
+  ariaProductPreview: 'ビーズ図案の製品プレビュー', ariaPreviewControls: 'プレビュー操作', ariaPreviewBackground: 'プレビュー背景色を選択', ariaTrustFacts: '製品の信頼性情報', ariaBrandList: '対応ビーズブランドの一覧'
+});
+Object.assign(I18N.ko, {
+  previewWindowTitle: '비즈 도안 미리보기', previewInput: '입력 이미지', previewOutput: '비즈 출력', previewSourceAlt: '입력 이미지 예시', previewPatternAlt: '비즈 도안 출력 예시',
+  previewFitLegend: '이미지 맞춤', previewFit: 'Fit', previewFill: 'Fill', previewStretch: 'Stretch', previewBackground: '배경색', previewStatus: '미리보기를 업데이트했습니다:',
+  trustBrands: '브랜드 / 992가지 색상 코드', trustLanguages: '지원 언어', trustPrivate: '이미지는 브라우저에서 처리', brandsMore: '+ 4 팔레트',
+  featuresKicker: '새 편집기', featureFitTitle: 'Fit, Fill, Stretch', featureFitDesc: '전체 표시, 채우고 자르기, 늘려 채우기 중에서 선택하세요.', featureBackgroundTitle: '투명 배경색', featureBackgroundDesc: '투명 픽셀의 배경색을 고르고 결과를 미리 확인하세요.', featureSafetyTitle: '안전한 크기 제한', featureSafetyDesc: '10–200칸과 최대 40,000칸 제한으로 너무 큰 도안을 방지합니다.', featurePdfTitle: '만들기 쉬운 PDF', featurePdfDesc: '요약, 색상 코드 목록, 50×50 분할 도안 페이지를 PDF로 내보냅니다.', mobileCta: '도안 만들기',
+  ariaProductPreview: '비즈 도안 제품 미리보기', ariaPreviewControls: '미리보기 컨트롤', ariaPreviewBackground: '미리보기 배경색 선택', ariaTrustFacts: '제품 신뢰 정보', ariaBrandList: '지원 비즈 브랜드 목록'
+});
+
 function safeStorageGet(key) { try { return window.localStorage.getItem(key); } catch (_) { return null; } }
 function safeStorageSet(key, value) { try { window.localStorage.setItem(key, value); } catch (_) {} }
 function getLang() { return safeStorageGet('bead-lang') || 'zh-TW'; }
@@ -524,6 +561,7 @@ function applyLang(lang) {
   const dict = I18N[lang] || I18N['zh-TW'];
   document.querySelectorAll('[data-i18n]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n')]; if (value != null) el.textContent = value; });
   document.querySelectorAll('[data-i18n-html]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n-html')]; if (value != null) el.innerHTML = value; });
+  document.querySelectorAll('[data-i18n-alt]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n-alt')]; if (value != null) el.setAttribute('alt', value); });
   document.querySelectorAll('[data-i18n-aria-label]').forEach(function(el) { const value = dict[el.getAttribute('data-i18n-aria-label')]; if (value != null) el.setAttribute('aria-label', value); });
   document.documentElement.lang = lang;
   const pageTitle = document.body && document.body.getAttribute('data-page-title'); if (pageTitle) document.title = dict[pageTitle] || document.title;

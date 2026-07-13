@@ -46,7 +46,7 @@
   </nav>
 
   <main class="landing-main" id="main-content">
-    <section class="hero">
+    <section class="hero landing-v2-hero">
       <div class="hero-content">
         <div class="hero-badge" data-i18n="heroBadge">免費線上工具 · 無需註冊</div>
         <h1 data-i18n-html="heroTitle">把喜歡的圖片<br>變成拼豆圖紙</h1>
@@ -58,54 +58,69 @@
           </a>
           <a href="#how-it-works" class="btn-ghost" data-i18n="heroGhost">了解使用方式</a>
         </div>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <span class="hero-stat-num">9</span>
-            <span class="hero-stat-label" data-i18n="statBrands">支援品牌</span>
-          </div>
-          <div class="hero-stat">
-            <span class="hero-stat-num">992</span>
-            <span class="hero-stat-label" data-i18n="statColors">真實色號</span>
-          </div>
-          <div class="hero-stat">
-            <span class="hero-stat-num">100%</span>
-            <span class="hero-stat-label" data-i18n="statFree">免費使用</span>
-          </div>
-        </div>
       </div>
       <div class="hero-visual">
-        <div class="bead-grid-demo" id="beadDemo" data-i18n-aria-label="ariaPatternAnimation"></div>
-        <div class="hero-visual-glow"></div>
+        <section class="product-preview" data-i18n-aria-label="ariaProductPreview">
+          <div class="preview-titlebar" aria-hidden="true"><span></span><span></span><span></span><b data-i18n="previewWindowTitle">拼豆圖紙預覽</b></div>
+          <div class="preview-workspace" id="previewWorkspace">
+            <figure class="preview-panel preview-input-panel">
+              <figcaption><span class="preview-dot preview-dot-input"></span><span data-i18n="previewInput">輸入圖片</span></figcaption>
+              <div class="preview-image-frame"><img id="sourcePreview" src="demo.jpg" data-i18n-alt="previewSourceAlt" alt="範例輸入圖片" loading="eager"></div>
+            </figure>
+            <div class="preview-transform" aria-hidden="true">
+              <div class="bead-grid-demo" id="beadDemo" data-i18n-aria-label="ariaPatternAnimation"></div>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+            </div>
+            <figure class="preview-panel preview-output-panel">
+              <figcaption><span class="preview-dot preview-dot-output"></span><span data-i18n="previewOutput">拼豆輸出</span></figcaption>
+              <div class="preview-image-frame preview-output-frame" id="outputPreviewFrame"><img id="patternPreview" src="demo-beads.png" data-i18n-alt="previewPatternAlt" alt="範例拼豆圖紙輸出" loading="eager"></div>
+            </figure>
+          </div>
+
+        </section>
       </div>
     </section>
 
-    <section class="brands-strip fade-in">
-      <p data-i18n="brandsLabel">支援品牌</p>
-      <div class="brands-list">
-        <span>MARD</span><span>Hama</span><span>Artkal S</span><span>Artkal R</span><span>Artkal C</span><span>Artkal A</span><span>Perler</span><span>Perler Mini</span><span>Nabbi</span>
+    <section class="trust-section fade-in" aria-label="Product facts" data-i18n-aria-label="ariaTrustFacts">
+      <div class="trust-facts">
+        <p><strong>9</strong><span data-i18n="trustBrands">品牌／992 種色號</span></p>
+        <p><strong>5</strong><span data-i18n="trustLanguages">種介面語言</span></p>
+        <p><strong>100%</strong><span data-i18n="trustPrivate">圖片只在瀏覽器中處理</span></p>
+      </div>
+      <div class="brands-strip">
+        <p data-i18n="brandsLabel">支援品牌</p>
+        <div class="brands-list" aria-label="Supported bead brands" data-i18n-aria-label="ariaBrandList">
+          <span>MARD</span><span>Hama</span><span>Artkal</span><span>Perler</span><span>Nabbi</span><span data-i18n="brandsMore">+ 4 種色盤</span>
+        </div>
       </div>
     </section>
 
-    <section class="intro-section fade-in">
-      <h2 data-i18n="introTitle">什麼是拼豆？</h2>
-      <p data-i18n="introDesc">拼豆（Fuse Beads）是一種小型塑膠珠子，放在模板板上排列出圖案後，用熨斗加熱讓珠子融合在一起，就能做出獨一無二的像素風格作品。不管是角色、風景還是文字，都能用拼豆來呈現。</p>
-    </section>
-
-    <section class="demo-section fade-in">
-      <h2 data-i18n="demoTitle">轉換效果預覽</h2>
-      <p class="section-desc" data-i18n="demoDesc">原始圖片經過轉換後，會變成像素風格的拼豆圖紙</p>
-      <div class="demo-compare">
-        <div class="demo-card">
-          <div class="demo-label" data-i18n="demoOriginal">Original</div>
-          <img src="demo.jpg" alt="Demo original image" loading="lazy">
-        </div>
-        <div class="demo-arrow" aria-hidden="true">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </div>
-        <div class="demo-card">
-          <div class="demo-label" data-i18n="demoBeads">Bead Pattern</div>
-          <img src="demo-beads.png" alt="Bead pattern preview" loading="lazy">
-        </div>
+    <section class="features-section editor-features fade-in">
+      <div class="section-heading">
+        <p class="section-kicker" data-i18n="featuresKicker">新版編輯器</p>
+        <h2 data-i18n="featTitle">功能特色</h2>
+      </div>
+      <div class="features">
+        <article class="feature-card">
+          <div class="feature-icon" style="background:var(--accent-light);color:var(--accent)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 15h6"/></svg></div>
+          <h3 data-i18n="featureFitTitle">Fit、Fill、Stretch</h3>
+          <p data-i18n="featureFitDesc">依圖片內容選擇完整顯示、裁切填滿或拉伸填滿。</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" style="background:var(--mint-light);color:var(--mint)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 16 10 10l3 3 3-4 4 5"/></svg></div>
+          <h3 data-i18n="featureBackgroundTitle">透明背景色</h3>
+          <p data-i18n="featureBackgroundDesc">替透明像素挑選背景色，先在預覽中確認成品效果。</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" style="background:var(--purple-light);color:var(--purple)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h16v18H4z"/><path d="M8 7h8M8 12h8M8 17h5"/></svg></div>
+          <h3 data-i18n="featureSafetyTitle">安全尺寸保護</h3>
+          <p data-i18n="featureSafetyDesc">自訂 10–200 格，總格數最高 40,000，避免意外建立過大的圖紙。</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon" style="background:var(--yellow-light);color:#c89200"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h8M8 17h8"/></svg></div>
+          <h3 data-i18n="featurePdfTitle">可製作的 PDF</h3>
+          <p data-i18n="featurePdfDesc">匯出摘要、色號清單與 50×50 分頁圖紙，方便邊做邊核對。</p>
+        </article>
       </div>
     </section>
 
@@ -143,56 +158,9 @@
       </div>
     </section>
 
-    <section class="features-section fade-in">
-      <h2 data-i18n="featTitle">功能特色</h2>
-      <div class="features">
-        <div class="feature-card">
-          <div class="feature-icon" style="background:var(--accent-light);color:var(--accent)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-          <h4 data-i18n="feat1">9 大品牌色盤</h4>
-          <p data-i18n="feat1d">MARD、Hama、Artkal S/R/C/A、Perler、Perler Mini、Nabbi，共 992 種真實色號</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon" style="background:var(--mint-light);color:var(--mint)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
-          <h4 data-i18n="feat2">多種板子尺寸</h4>
-          <p data-i18n="feat2d">20×20、30×30、40×40、50×50、60×60 或自訂尺寸，靈活搭配你的拼豆板</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon" style="background:var(--purple-light);color:var(--purple)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-          <h4 data-i18n="feat3">符號輔助辨色</h4>
-          <p data-i18n="feat3d">開啟符號模式，每個顏色都有專屬符號，不怕搞混相近色</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon" style="background:var(--yellow-light);color:#c89200"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-          <h4 data-i18n="feat4">PDF 含色號清單</h4>
-          <p data-i18n="feat4d">下載的 PDF 自動附上顏色清單與用量統計，方便採購</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="needs-section fade-in">
-      <h2 data-i18n="needsTitle">開始拼豆你需要</h2>
-      <div class="needs-grid">
-        <div class="need-card">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-          <span data-i18n="need1">拼豆珠子</span>
-          <small data-i18n="need1d">選擇你喜歡的品牌</small>
-        </div>
-        <div class="need-card">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          <span data-i18n="need2">拼豆板</span>
-          <small data-i18n="need2d">方形模板板</small>
-        </div>
-        <div class="need-card">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span data-i18n="need3">助燙紙</span>
-          <small data-i18n="need3d">烘焙紙也可以</small>
-        </div>
-        <div class="need-card">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v8l4-2"/><circle cx="12" cy="14" r="8"/></svg>
-          <span data-i18n="need4">熨斗</span>
-          <small data-i18n="need4d">加熱融合珠子</small>
-        </div>
-      </div>
+    <section class="intro-section intro-section-compact fade-in">
+      <h2 data-i18n="introTitle">什麼是拼豆？</h2>
+      <p data-i18n="introDesc">拼豆（Fuse Beads）是一種小型塑膠珠子，放在模板板上排列出圖案後，用熨斗加熱讓珠子融合在一起，就能做出獨一無二的像素風格作品。不管是角色、風景還是文字，都能用拼豆來呈現。</p>
     </section>
 
     <section class="faq-section fade-in">
@@ -232,6 +200,8 @@
       </div>
     </section>
   </main>
+
+  <a href="editor.html" class="mobile-cta" data-i18n="mobileCta">開始製作圖紙</a>
 
   <footer>
     <div class="footer-links">
@@ -283,41 +253,46 @@
 
   <script>
   (function() {
+    var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     document.querySelectorAll('a[href^="#"]').forEach(function(a) {
       a.addEventListener('click', function(e) {
         var target = document.querySelector(this.getAttribute('href'));
-        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        }
       });
     });
-    var demo = document.getElementById('beadDemo');
-    if (!demo) return;
-    var size = 10;
-    var heart = [[0,0,1,1,0,0,1,1,0,0],[0,1,2,2,1,1,2,2,1,0],[1,2,3,3,2,2,3,3,2,1],[1,2,3,3,3,3,3,3,2,1],[1,2,3,3,3,3,3,3,2,1],[0,1,2,3,3,3,3,2,1,0],[0,0,1,2,3,3,2,1,0,0],[0,0,0,1,2,2,1,0,0,0],[0,0,0,0,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]];
-    var star = [[0,0,0,0,1,1,0,0,0,0],[0,0,0,1,2,2,1,0,0,0],[0,0,1,2,3,3,2,1,0,0],[1,1,2,3,3,3,3,2,1,1],[0,1,2,3,3,3,3,2,1,0],[0,0,1,3,3,3,3,1,0,0],[0,1,2,3,2,2,3,2,1,0],[1,2,3,2,1,1,2,3,2,1],[0,2,1,0,0,0,0,1,2,0],[0,1,0,0,0,0,0,0,1,0]];
-    var patterns = [heart, star];
-    var palettes = [['#faf7f2','#ffccd5','#ff8fa3','#f06449'],['#faf7f2','#c1f0db','#36c9a7','#0a8967'],['#faf7f2','#d5c4f7','#9b7bf7','#6a3fd4'],['#faf7f2','#ffe5a0','#ffc53d','#e6a200']];
-    var idx = 0;
-    window._beadDemoIdx = 0;
-    function render() {
-      var pal = palettes[idx % palettes.length], pat = patterns[idx % patterns.length];
-      demo.innerHTML = '';
-      demo.style.display = 'grid';
-      demo.style.gridTemplateColumns = 'repeat(' + size + ', 1fr)';
-      demo.style.gap = '3px';
-      for (var y = 0; y < size; y++) for (var x = 0; x < size; x++) {
-        var b = document.createElement('div');
-        b.className = 'demo-bead';
-        b.style.background = pal[pat[y][x]];
-        b.style.animationDelay = ((y+x)*0.035)+'s';
-        demo.appendChild(b);
-      }
-      idx++;
-      window._beadDemoIdx = idx;
-    }
-    render(); setInterval(render, 3500);
 
-    // Scroll fade-in animation
-    if ('IntersectionObserver' in window) {
+    var demo = document.getElementById('beadDemo');
+    if (demo) {
+      var size = 10;
+      var heart = [[0,0,1,1,0,0,1,1,0,0],[0,1,2,2,1,1,2,2,1,0],[1,2,3,3,2,2,3,3,2,1],[1,2,3,3,3,3,3,3,2,1],[1,2,3,3,3,3,3,3,2,1],[0,1,2,3,3,3,3,2,1,0],[0,0,1,2,3,3,2,1,0,0],[0,0,0,1,2,2,1,0,0,0],[0,0,0,0,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]];
+      var star = [[0,0,0,0,1,1,0,0,0,0],[0,0,0,1,2,2,1,0,0,0],[0,0,1,2,3,3,2,1,0,0],[1,1,2,3,3,3,3,2,1,1],[0,1,2,3,3,3,3,2,1,0],[0,0,1,3,3,3,3,1,0,0],[0,1,2,3,2,2,3,2,1,0],[1,2,3,2,1,1,2,3,2,1],[0,2,1,0,0,0,0,1,2,0],[0,1,0,0,0,0,0,0,1,0]];
+      var patterns = [heart, star];
+      var palettes = [['#faf7f2','#ffccd5','#ff8fa3','#f06449'],['#faf7f2','#c1f0db','#36c9a7','#0a8967'],['#faf7f2','#d5c4f7','#9b7bf7','#6a3fd4'],['#faf7f2','#ffe5a0','#ffc53d','#e6a200']];
+      var idx = 0;
+      window._beadDemoIdx = 0;
+      function render() {
+        var pal = palettes[idx % palettes.length], pat = patterns[idx % patterns.length];
+        demo.replaceChildren();
+        demo.style.display = 'grid';
+        demo.style.gridTemplateColumns = 'repeat(' + size + ', 1fr)';
+        for (var y = 0; y < size; y++) for (var x = 0; x < size; x++) {
+          var b = document.createElement('div');
+          b.className = 'demo-bead';
+          b.style.background = pal[pat[y][x]];
+          b.style.animationDelay = reducedMotion ? '0s' : ((y + x) * 0.035) + 's';
+          demo.appendChild(b);
+        }
+        idx++;
+        window._beadDemoIdx = idx;
+      }
+      render();
+      if (!reducedMotion) window.setInterval(render, 3500);
+    }
+
+    if ('IntersectionObserver' in window && !reducedMotion) {
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
